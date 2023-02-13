@@ -1,0 +1,31 @@
+{
+    "Create Ecstasy Component": {
+        "prefix": "comp",
+        "scope": "lua",
+        "body": [
+            "---@class ${1:Component} : ecstasy.Component",
+            "${1} = { reset = function(self) $0 end }, "
+        ]
+    },
+    "Create Ecstasy System": {
+        "prefix": "syst",
+        "scope": "lua",
+        "body": [
+            "local ecstasy = require \"external.ecstasy\"",
+            "local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed",
+            "local Components = require(\"ecs.components\")",
+            "",
+            "---@class ${1:System} : ecstasy.System",
+            "local ${1} = ecstasy.System(\"${1}\")",
+            "",
+            "function ${1}:init()",
+            "\t$0",
+            "end",
+            "",
+            "function ${1}:execute()",
+            "end",
+            "",
+            "return ${1}"
+        ]
+    }
+}

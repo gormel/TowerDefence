@@ -1,0 +1,32 @@
+local Msg = require("main.mesages")
+local Constants = require("ecs.constants")
+
+function init(self)
+	self.tower_selections = {}
+	self.tower_selections[Constants.TOWER_TYPE_COMMON] = "common_tower_selection"
+	self.tower_selections[Constants.TOWER_TYPE_FREEZE] = "freeze_tower_selection"
+end
+
+function final(self)
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == Msg.UPDATE_MONEY then
+		gui.set_text(gui.get_node("money_text"), message.money)
+	elseif message_id == Msg.UPDATE_SELECTED_TOWER then
+		local tower_type = message.tower_type
+		for k, v in pairs(self.tower_selections) do
+			local visible = k == tower_type
+			gui.set_visible(gui.get_node(v), visible)
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+end
+
+function on_reload(self)
+end
