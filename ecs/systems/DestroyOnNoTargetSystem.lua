@@ -16,7 +16,7 @@ function DestroyOnNoTargetSystem:execute()
     for _, entity in self.filter:entities() do
         local target = self.targets:get(entity)
         if self.destroyeds:has(target.target) then
-            self.destroyeds:add(entity)
+            self.destroyeds:get_or_add(entity)
         end
     end
 end
