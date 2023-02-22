@@ -7,7 +7,6 @@ local FollowTargetSystem = ecstasy.System("FollowTargetSystem")
 
 function FollowTargetSystem:init()
     self.positions = self.world:get_table(Components.Position)
-    self.velocitys = self.world:get_table(Components.Velocity)
     self.follows = self.world:get_table(Components.FollowTarget)
     self.target_reacheds = self.world:get_table(Components.TargetReached)
     self.targets = self.world:get_table(Components.Target)
@@ -15,7 +14,8 @@ function FollowTargetSystem:init()
     self.filter = self.world:create_filter(Components.FollowTarget, Components.Position, Components.Target)
 end
 
-function FollowTargetSystem:execute()
+---@param dt number
+function FollowTargetSystem:execute(dt)
     for _, entity in self.filter:entities() do
         local pos = self.positions:get(entity)
         local follow = self.follows:get(entity)
@@ -27,14 +27,16 @@ function FollowTargetSystem:execute()
             local dx = target_pos.x - pos.x
             local dy = target_pos.y - pos.y
             local len = math.sqrt(dx * dx + dy * dy)
+            
+            local t = follow.speed * dt / len
+            if t > 1 or t ~= t then -- or t is nan
+                t = 1
+            end
 
-            local vel = self.velocitys:get_or_add(entity)
-            if len > 1 then
-                vel.x = dx / len * follow.speed
-                vel.y = dy / len * follow.speed
-            else
-                vel.x = 0
-                vel.y = 0
+            pos.x = vmath.lerp(t, pos.x, target_pos.x)
+            pos.y = vmath.lerp(t, pos.y, target_pos.y)
+
+            if t >= 1 then
                 local reached = self.target_reacheds:get_or_add(entity)
                 reached.target = target.target
             end
