@@ -1,20 +1,12 @@
 local ecstasy = require "external.ecstasy"
 local Components = require("ecs.components")
 local const = require("ecs.constants")
+local setup = require "ecs.setup"
 
 ---@class CreateTowerSystem : ecstasy.System
----@field tower_cost_map table
----@field tower_radius_map table
----@field factory_url_map table
----@field tower_damage_map table
 local CreateTowerSystem = ecstasy.System("CreateTowerSystem")
 
 function CreateTowerSystem:init()
-	assert(self.tower_cost_map)
-	assert(self.tower_radius_map)
-	assert(self.factory_url_map)
-	assert(self.tower_damage_map)
-
 	self.destroyed_components = self.world:get_table(Components.Destroyed)
 	self.request_components = self.world:get_table(Components.TowerCreateRequest)
 	self.position_components = self.world:get_table(Components.Position)
@@ -39,7 +31,7 @@ function CreateTowerSystem:execute()
 		self.destroyed_components:add(entity)
 
 		local type = self.request_components:get(entity).tower_type
-		local cost = self.tower_cost_map[type]
+		local tower_setup = setup.Towers[type]
 		
 		local pos = self.position_components:get(entity)
 		
@@ -57,8 +49,8 @@ function CreateTowerSystem:execute()
 
 		if not busy then
 			for _, money in self.money_components:components() do
-				if (money.value >= cost) then
-					money.value = money.value - cost
+				if (money.value >= tower_setup.cost) then
+					money.value = money.value - tower_setup.cost
 					
 					local tower_entity = self.world:new_entity()
 					self.tower_components:add(tower_entity)
@@ -67,10 +59,10 @@ function CreateTowerSystem:execute()
 					tower_pos.y = pos.y
 
 					local view_radius = self.view_radius_components:add(tower_entity)
-					view_radius.radius = self.tower_radius_map[type]
+					view_radius.radius = tower_setup.radius
 
 					local damage = self.damage_components:add(tower_entity)
-					damage.value = self.tower_damage_map[type]
+					damage.value = tower_setup.damage
 
 					self.rotate_to_target_components:add(tower_entity)
 					self.free_out_of_view_target_components:add(tower_entity)
@@ -79,7 +71,7 @@ function CreateTowerSystem:execute()
 
 					local tower_view_entity = self.world:new_entity()
 					local resource = self.resource_components:add(tower_view_entity)
-					resource.factory_url = self.factory_url_map[type]
+					resource.factory_url = tower_setup.factory_url
 					local parent = self.parent_components:add(tower_view_entity)
 					parent.entity = tower_entity
 					self.attach_to_parent_components:add(tower_view_entity)

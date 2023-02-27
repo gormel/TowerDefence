@@ -40,16 +40,7 @@ local DefWorld = ecstasy.World()
 local function init_spawner(self, entity)
 	local spawner_entity = entity
 	local spawner_setup = self.world:add_component(Components.MonsterSpawner, spawner_entity)
-	spawner_setup.setup = {
-		monster_interval = 2,
-        wave_interval = 20,
-        wave_size = 5,
-        monster_hp = 100,
-		monster_reward = 25,
-        wave_size_progression = 1.2,
-        monster_hp_progression = 1.5,
-		monster_reward_progression = 1.4,
-	}
+	spawner_setup.setup = setup.MonsterSpawnerSetup
 end
 
 local function init_road(self, ...)
@@ -116,24 +107,7 @@ function init(self)
 		factory_url = "/go#monster_factory" 
 	})
 	
-	self.systems:register(CreateTowerSystem, { 
-		factory_url_map = {
-			common = "/go#common_tower_factory",
-			freeze = "/go#freeze_tower_factory"
-		},
-		tower_cost_map = {
-			common = 100,
-			freeze = 150
-		},
-		tower_radius_map = {
-			common = const.CELL_SIZE * 2,
-			freeze = const.CELL_SIZE * 2
-		},
-		tower_damage_map = {
-			common = 50,
-			freeze = 25,
-		},
-	})
+	self.systems:register(CreateTowerSystem)
 
 	--render scene
 	self.systems:register(PoseViewSystem)
@@ -188,6 +162,13 @@ function init(self)
 	init_spawner(self, road_start)
 end
 
+local function select_tower_build(self, tower_type)
+	local req_entity = self.world:new_entity()
+	local req = self.world:add_component(Components.SelectTowerTypeRequest, req_entity)
+	req.tower_type = tower_type
+	self.world:add_component(Components.Destroyed, req_entity)
+end
+
 function on_input(self, action_id, action)
 	if action_id == nil then
 		local touch_entity = self.world:new_entity()
@@ -205,15 +186,9 @@ function on_input(self, action_id, action)
 		end
 		self.world:add_component(Components.Destroyed, touch_entity)
 	elseif action_id == hash("1") and action.pressed then
-		local req_entity = self.world:new_entity()
-		local req = self.world:add_component(Components.SelectTowerTypeRequest, req_entity)
-		req.tower_type = const.TOWER_TYPE_COMMON
-		self.world:add_component(Components.Destroyed, req_entity)
+		select_tower_build(self, const.TOWER_TYPE_COMMON)
 	elseif action_id == hash("2") and action.pressed then
-		local req_entity = self.world:new_entity()
-		local req = self.world:add_component(Components.SelectTowerTypeRequest, req_entity)
-		req.tower_type = const.TOWER_TYPE_FREEZE
-		self.world:add_component(Components.Destroyed, req_entity)
+		select_tower_build(self, const.TOWER_TYPE_FREEZE)
 	elseif action_id == hash("3") and action.pressed then
 	end
 end
