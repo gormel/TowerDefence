@@ -30,6 +30,7 @@ function SpawnMonsterSystem:execute()
                 req.hp = setup.setup.monster_hp * math.pow(setup.setup.monster_hp_progression, setup.wave)
                 req.initial_waypoint = entity
                 req.reward = math.floor(setup.setup.monster_reward * math.pow(setup.setup.monster_reward_progression, setup.wave))
+                req.damage = setup.setup.monster_damage_to_castle
                 local req_pos = self.positions:add(req_entity)
                 req_pos.x = pos.x
                 req_pos.y = pos.y

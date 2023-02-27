@@ -11,6 +11,11 @@ return {
         wave_size_progression = 1.2,
         monster_hp_progression = 1.5,
 		monster_reward_progression = 1.4,
+        monster_damage_to_castle = 1,
+    },
+
+    CastleSetup = {
+        health = 20,
     },
 
     Towers = {

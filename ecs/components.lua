@@ -91,7 +91,8 @@ return {
 	---@field hp number
 	---@field initial_waypoint number
 	---@field reward number
-	MonsterCreateRequest = { reset = function(self) self.hp = 100 self.initial_waypoint = nil self.reward = 0 end }, 
+	---@field damage number
+	MonsterCreateRequest = { reset = function(self) self.hp = 100 self.initial_waypoint = nil self.reward = 0 self.damage = 1 end }, 
 	---@class Velocity : ecstasy.Component
 	---@field x number
 	---@field y number
@@ -123,4 +124,8 @@ return {
 	---@class Reward : ecstasy.Component
 	---@field value number
 	Reward = { reset = function(self) self.value = 0 end }, 
+	---@class DestroyOnCastleReached : ecstasy.Component
+	DestroyOnCastleReached = { reset = function(self)  end }, 
+	---@class Castle : ecstasy.Component
+	Castle = { reset = function(self)  end }, 
 }

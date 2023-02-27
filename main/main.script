@@ -33,9 +33,15 @@ local DestroyChildrenSystem           = require("ecs.systems.DestroyChildrenSyst
 local DestroyByHealthSystem           = require("ecs.systems.DestroyByHealthSystem")
 local DestroyOnNoTargetSystem         = require("ecs.systems.DestroyOnNoTargetSystem")
 local RewardSystem                    = require("ecs.systems.RewardSystem")
+local DestroyOnCastleReachedSystem    = require("ecs.systems.DestroyOnCastleReachedSystem")
 
 local DefWorld = ecstasy.World()
 
+local function init_castle(self, entity)
+	self.world:add_component(Components.Castle, entity)
+	local castle_health = self.world:add_component(Components.Health, entity)
+	castle_health.value = setup.CastleSetup.health
+end
 
 local function init_spawner(self, entity)
 	local spawner_entity = entity
@@ -62,6 +68,25 @@ local function init_road(self, ...)
 		if prev ~= nil then
 			local prev_waypoint = self.world:get_component(Components.Waypoint, prev)
 			prev_waypoint.next = waypoint_entity
+
+			local prev_pos = self.world:get_component(Components.Position, prev)
+			local delta_x = pos.x - prev_pos.x
+			local delta_y = pos.y - prev_pos.y
+			local dist = math.sqrt(delta_x * delta_x + delta_y * delta_y)
+			for i = const.CELL_SIZE, dist, const.CELL_SIZE do
+				local palet_entity = self.world:new_entity()
+				local palet_pos = self.world:add_component(Components.Position, palet_entity)
+				palet_pos.x = pos.x - delta_x * i / (dist)
+				palet_pos.y = pos.y - delta_y * i / (dist)
+				self.world:add_component(Components.BlocksTower, palet_entity)
+
+				local palet_view_entity = self.world:new_entity()
+				local palet_vew_resource = self.world:add_component(Components.Resource, palet_view_entity)
+				palet_vew_resource.factory_url = "/go#palete_factory"
+				local palet_view_parent = self.world:add_component(Components.Parent, palet_view_entity)
+				palet_view_parent.entity = palet_entity
+				 self.world:add_component(Components.AttachToParent, palet_view_entity)
+			end
 		end
 
 		prev = waypoint_entity
@@ -102,6 +127,7 @@ function init(self)
 	self.systems:register(SpawnMonsterSystem)
 	self.systems:register(DealDamageOnTargetReachedSystem)
 	self.systems:register(DestroyOnTargetReachedSystem)
+	self.systems:register(DestroyOnCastleReachedSystem)
 
 	self.systems:register(CreateMonsterSystem, { 
 		factory_url = "/go#monster_factory" 
@@ -160,6 +186,9 @@ function init(self)
 
 	--Spawner
 	init_spawner(self, road_start)
+
+	--Castle
+	init_castle(self, road_end)
 end
 
 local function select_tower_build(self, tower_type)

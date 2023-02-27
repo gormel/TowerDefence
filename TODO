@@ -1,8 +1,4 @@
-ref: move tower setup to setup.lua
-ref: move monster spawner settings to setup.lua
-fea: castle, castle hp
-ref: add tower type to init logic
-fix: tower on road place possibility
+fea: game over
 fea: freeze tower logic
 fea: add poison tower
 fea: next wave button
