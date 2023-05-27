@@ -21,6 +21,8 @@ function ShootSystem:init()
     self.positions = self.world:get_table(Components.Position)
     self.destroy_on_no_targets = self.world:get_table(Components.DestroyOnNoTarget)
     self.towers = self.world:get_table(Components.Tower)
+    self.status_applys = self.world:get_table(Components.ApplyStatusToTargetOnTargetReached)
+    self.speeds = self.world:get_table(Components.Speed)
 
     self.filter = self.world:create_filter(Components.Tower, Components.Target, Components.Damage, Components.Position)
 end
@@ -42,14 +44,21 @@ function ShootSystem:execute()
                 bullet_target.target = target.target
                 local bullet_damage = self.damages:add(bullet_entity)
                 bullet_damage.value = damage.value
-                local follow_target = self.follow_targets:add(bullet_entity)
-                follow_target.speed = 120
+                self.follow_targets:add(bullet_entity)
+                local speed = self.speeds:add(bullet_entity)
+                speed.value = setup.Towers[tower.tower_type].bullet_speed
                 self.destroy_on_target_reacheds:add(bullet_entity)
                 self.deal_damage_on_target_reacheds:add(bullet_entity)
                 self.destroy_on_no_targets:add(bullet_entity)
                 local bullet_pos = self.positions:add(bullet_entity)
                 bullet_pos.x = pos.x
                 bullet_pos.y = pos.y
+                if setup.Towers[tower.tower_type].ApplyStatus ~= nil then
+                    local bullet_apply_status = self.status_applys:add(bullet_entity)
+                    for _, status in ipairs(setup.Towers[tower.tower_type].ApplyStatus) do
+                        table.insert(bullet_apply_status.status, status)
+                    end
+                end
 
                 local bullet_view_entity = self.world:new_entity()
                 local resource = self.resource_components:add(bullet_view_entity)

@@ -36,6 +36,10 @@ local RewardSystem                    = require("ecs.systems.RewardSystem")
 local DestroyOnCastleReachedSystem    = require("ecs.systems.DestroyOnCastleReachedSystem")
 local GameOverSystem                  = require("ecs.systems.GameOverSystem")
 local mesages                         = require("main.mesages")
+local SetupSpeedSystem                = require("ecs.systems.SetupSpeedSystem")
+local ApplyStatusSystem               = require("ecs.systems.ApplyStatusSystem")
+local ApplyStatusOnTragetReachedSystem= require("ecs.systems.ApplyStatusOnTragetReachedSystem")
+local FrozenSystem                    = require("ecs.systems.FrozenSystem")
 
 local DefWorld = ecstasy.World()
 
@@ -149,6 +153,12 @@ function init(self)
 	self.systems:register(SelectTowerTypeSystem)
 	self.systems:register(RequestTowerSystem)
 
+	--setup parameters
+	self.systems:register(SetupSpeedSystem)
+
+	--modify parameters
+	self.systems:register(FrozenSystem)
+
 	self.systems:register(FollowPointerSystem)
 	self.systems:register(RoundToCellSystem)
 	self.systems:register(AttachToParentSystem)
@@ -157,6 +167,7 @@ function init(self)
 	self.systems:register(ApplyVelocitySystem)
 	self.systems:register(CooldownSystem)
 
+	self.systems:register(ApplyStatusSystem)
 	self.systems:register(ShootSystem)
 	self.systems:register(SwitchWaypointSystem)
 	self.systems:register(TargetMonsterInViewRadiusSystem)
@@ -164,6 +175,7 @@ function init(self)
 	self.systems:register(DealDamageOnTargetReachedSystem)
 	self.systems:register(DestroyOnTargetReachedSystem)
 	self.systems:register(DestroyOnCastleReachedSystem)
+	self.systems:register(ApplyStatusOnTragetReachedSystem)
 
 	self.systems:register(CreateMonsterSystem)
 	

@@ -24,6 +24,7 @@ function CreateMonsterSystem:init()
     self.deal_damage_on_target_reacheds = self.world:get_table(Components.DealDamageOnTargetReached)
     self.rewards = self.world:get_table(Components.Reward)
     self.destroy_monsters = self.world:get_table(Components.DestroyOnCastleReached)
+    self.speeds = self.world:get_table(Components.Speed)
 
     self.filter = self.world:create_filter(Components.MonsterCreateRequest, Components.Position)
 end
@@ -45,8 +46,9 @@ function CreateMonsterSystem:execute()
             self.monsters:add(monster_entity)
             local target = self.targets:add(monster_entity)
             target.target = request.initial_waypoint
-            local follow_target = self.follow_targets:add(monster_entity)
-            follow_target.speed = request.speed
+            self.follow_targets:add(monster_entity)
+            local speed = self.speeds:add(monster_entity)
+            speed.value = request.speed
             self.rotate_to_targets:add(monster_entity)
             local damage = self.damages:add(monster_entity)
             damage.value = request.damage

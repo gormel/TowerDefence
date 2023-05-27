@@ -1,5 +1,7 @@
 local ecstasy = require "external.ecstasy"
 
+---@alias status "Frozen" | "Poisoned"
+
 return {
 	---@class PointerInput : ecstasy.Component
 	---@field x number
@@ -55,8 +57,7 @@ return {
 	---@field value number
 	Health = { reset = function(self) self.value = 100 end }, 
 	---@class FollowTarget : ecstasy.Component
-	---@field speed number
-	FollowTarget = { reset = function(self) self.speed = 1 end }, 
+	FollowTarget = { reset = function(self) end }, 
 	---@class RotateToTarget : ecstasy.Component
 	RotateToTarget = { }, 
 	---@class Target : ecstasy.Component
@@ -64,7 +65,8 @@ return {
 	Target = { reset = function(self) self.target = 0 end }, 
 	---@class Speed : ecstasy.Component
 	---@field value number
-	Speed = { reset = function(self) self.value = 0 end }, 
+	---@field initial_value? number
+	Speed = { reset = function(self) self.value = 0 self.initial_value = nil end }, 
 	---@class ViewRadius : ecstasy.Component
 	---@field radius number
 	ViewRadius = { reset = function(self) self.radius = 0 end }, 
@@ -120,7 +122,12 @@ return {
 	---@field duration number
 	FreezeOnTargetReached = { reset = function(self) self.duration = 0 end }, 
 	---@class Frozen : ecstasy.Component
-	Frozen = { reset = function(self) self.cooldown = 0 self.initial_speed = vmath.vector3() end }, 
+	---@field cooldown number
+	---@field power number
+	Frozen = { reset = function(self) self.cooldown = 0 self.power = 1 end }, 
+	---@class Poisoned : ecstasy.Component
+	---@field cooldown number
+	Poisoned = { reset = function(self) self.cooldown = 0 end }, 
 	---@class DestroyOnNoTarget : ecstasy.Component
 	DestroyOnNoTarget = { }, 
 	---@class Reward : ecstasy.Component
@@ -130,4 +137,10 @@ return {
 	DestroyOnCastleReached = { reset = function(self)  end }, 
 	---@class Castle : ecstasy.Component
 	Castle = { reset = function(self)  end }, 
+	---@class ApplyStatus : ecstasy.Component
+	---@field status status[]
+	ApplyStatus = { reset = function(self) self.status = {} end }, 
+	---@class ApplyStatusOnTargetReached : ecstasy.Component
+	---@field status status[]
+	ApplyStatusToTargetOnTargetReached = { reset = function(self) self.status = {} end }, 
 }

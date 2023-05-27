@@ -28,6 +28,7 @@ return {
             radius = Constants.CELL_SIZE * 2,
             damage = 50,
             bullet_factory_url = "/go#bullet_factory",
+            bullet_speed = 120,
         },
         [Constants.TOWER_TYPE_FREEZE] = {
             factory_url = "/go#freeze_tower_factory",
@@ -35,6 +36,16 @@ return {
             radius = Constants.CELL_SIZE * 2,
             damage = 25,
             bullet_factory_url = "/go#bullet_factory",
+            ApplyStatus = { "Frozen" },
+            bullet_speed = 120,
         },
-    }
+    },
+
+    Statuses = {
+        ["Frozen"] = {
+            force = 0.5,
+            duration = 5,
+        },
+        ["Poisoned"] = {},
+    },
 }

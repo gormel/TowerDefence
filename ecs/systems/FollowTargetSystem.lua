@@ -7,9 +7,9 @@ local FollowTargetSystem = ecstasy.System("FollowTargetSystem")
 
 function FollowTargetSystem:init()
     self.positions = self.world:get_table(Components.Position)
-    self.follows = self.world:get_table(Components.FollowTarget)
     self.target_reacheds = self.world:get_table(Components.TargetReached)
     self.targets = self.world:get_table(Components.Target)
+    self.speeds = self.world:get_table(Components.Speed)
 
     self.filter = self.world:create_filter(Components.FollowTarget, Components.Position, Components.Target)
 end
@@ -18,8 +18,10 @@ end
 function FollowTargetSystem:execute(dt)
     for _, entity in self.filter:entities() do
         local pos = self.positions:get(entity)
-        local follow = self.follows:get(entity)
         local target = self.targets:get(entity)
+
+        local speed_c = self.speeds:safe_get(entity)
+        local speed = speed_c and speed_c.value or 1
 
         if self.positions:has(target.target) then
             local target_pos = self.positions:get(target.target)
@@ -28,7 +30,7 @@ function FollowTargetSystem:execute(dt)
             local dy = target_pos.y - pos.y
             local len = math.sqrt(dx * dx + dy * dy)
             
-            local t = follow.speed * dt / len
+            local t = speed * dt / len
             if t > 1 or t ~= t then -- or t is nan
                 t = 1
             end
