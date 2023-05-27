@@ -34,6 +34,8 @@ local DestroyByHealthSystem           = require("ecs.systems.DestroyByHealthSyst
 local DestroyOnNoTargetSystem         = require("ecs.systems.DestroyOnNoTargetSystem")
 local RewardSystem                    = require("ecs.systems.RewardSystem")
 local DestroyOnCastleReachedSystem    = require("ecs.systems.DestroyOnCastleReachedSystem")
+local GameOverSystem                  = require("ecs.systems.GameOverSystem")
+local mesages                         = require("main.mesages")
 
 local DefWorld = ecstasy.World()
 
@@ -95,67 +97,7 @@ local function init_road(self, ...)
 	return first, prev
 end
 
-function init(self)
-	msg.post(".", "acquire_input_focus")
-	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
-	
-	local seed = os.time()
-	math.randomseed(seed)
-
-	self.world = DefWorld:new()
-	
-	self.systems = ecstasy.SystemsList({ world = self.world })
-	--init
-	self.systems:register(InitViewSystem)
-	
-	self.systems:register(SelectTowerTypeSystem)
-	self.systems:register(RequestTowerSystem)
-
-	self.systems:register(FollowPointerSystem)
-	self.systems:register(RoundToCellSystem)
-	self.systems:register(AttachToParentSystem)
-	self.systems:register(FollowTargetSystem)
-	self.systems:register(RotateToTargetSystem)
-	self.systems:register(ApplyVelocitySystem)
-	self.systems:register(CooldownSystem)
-
-	self.systems:register(ShootSystem, { 
-		factory_url = "/go#bullet_factory" 
-	 })
-	self.systems:register(SwitchWaypointSystem)
-	self.systems:register(TargetMonsterInViewRadiusSystem)
-	self.systems:register(SpawnMonsterSystem)
-	self.systems:register(DealDamageOnTargetReachedSystem)
-	self.systems:register(DestroyOnTargetReachedSystem)
-	self.systems:register(DestroyOnCastleReachedSystem)
-
-	self.systems:register(CreateMonsterSystem, { 
-		factory_url = "/go#monster_factory" 
-	})
-	
-	self.systems:register(CreateTowerSystem)
-
-	--render scene
-	self.systems:register(PoseViewSystem)
-	self.systems:register(RotateViewSystem)
-
-	--render gui
-	self.systems:register(RenderMoneySystem)
-	self.systems:register(RenderSelectedTowerSystem)
-	
-	--cleanup
-	self.systems:register(DestroyByHealthSystem)
-	self.systems:register(RewardSystem)
-	self.systems:register(DestroyOnNoTargetSystem)
-	self.systems:register(FreeTargetSystem)
-	self.systems:register(FreeOutOfViewTargetSystem)
-	self.systems:register(ClearTargetReachedSystem)
-	self.systems:register(DestroyChildrenSystem)
-	self.systems:register(ClearViewSystem)
-	self.systems:register(DestroySystem)
-
-	self.systems:init()
-	
+local function init_game(self)
 	--Money
 	local money_entity = self.world:new_entity()
 	local money = self.world:add_component(Components.Money, money_entity)
@@ -191,11 +133,86 @@ function init(self)
 	init_castle(self, road_end)
 end
 
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
+	
+	local seed = os.time()
+	math.randomseed(seed)
+
+	self.world = DefWorld:new()
+	
+	self.systems = ecstasy.SystemsList({ world = self.world })
+	--init
+	self.systems:register(InitViewSystem)
+	
+	self.systems:register(SelectTowerTypeSystem)
+	self.systems:register(RequestTowerSystem)
+
+	self.systems:register(FollowPointerSystem)
+	self.systems:register(RoundToCellSystem)
+	self.systems:register(AttachToParentSystem)
+	self.systems:register(FollowTargetSystem)
+	self.systems:register(RotateToTargetSystem)
+	self.systems:register(ApplyVelocitySystem)
+	self.systems:register(CooldownSystem)
+
+	self.systems:register(ShootSystem)
+	self.systems:register(SwitchWaypointSystem)
+	self.systems:register(TargetMonsterInViewRadiusSystem)
+	self.systems:register(SpawnMonsterSystem)
+	self.systems:register(DealDamageOnTargetReachedSystem)
+	self.systems:register(DestroyOnTargetReachedSystem)
+	self.systems:register(DestroyOnCastleReachedSystem)
+
+	self.systems:register(CreateMonsterSystem)
+	
+	self.systems:register(CreateTowerSystem)
+
+
+	--render scene
+	self.systems:register(PoseViewSystem)
+	self.systems:register(RotateViewSystem)
+
+	--render gui
+	self.systems:register(RenderMoneySystem)
+	self.systems:register(RenderSelectedTowerSystem)
+	
+	--destroys
+	self.systems:register(DestroyByHealthSystem)
+	self.systems:register(DestroyOnNoTargetSystem)
+	self.systems:register(DestroyChildrenSystem)
+
+	--destroy triggers
+	self.systems:register(FreeTargetSystem)
+	self.systems:register(FreeOutOfViewTargetSystem)
+	self.systems:register(ClearTargetReachedSystem)
+	self.systems:register(RewardSystem)
+	self.systems:register(GameOverSystem)
+	self.systems:register(ClearViewSystem)
+
+	--process destroy
+	self.systems:register(DestroySystem)
+
+	self.systems:init()
+
+	init_game(self)
+end
+
 local function select_tower_build(self, tower_type)
 	local req_entity = self.world:new_entity()
 	local req = self.world:add_component(Components.SelectTowerTypeRequest, req_entity)
 	req.tower_type = tower_type
 	self.world:add_component(Components.Destroyed, req_entity)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == mesages.GAME_OVER then
+		msg.post("/gui#gui", mesages.GAME_OVER)
+	elseif message_id == mesages.RESTART then
+		msg.post(".", "acquire_input_focus")
+		init_game(self)
+	end
 end
 
 function on_input(self, action_id, action)

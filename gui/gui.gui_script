@@ -1,5 +1,6 @@
 local Msg = require("main.mesages")
 local Constants = require("ecs.constants")
+local mesages   = require("main.mesages")
 
 local scheme = {
 	IMAGE_TABLE_SELECTIONS = {
@@ -7,9 +8,12 @@ local scheme = {
 		[Constants.TOWER_TYPE_FREEZE] = "tmpl_freeze_tower/selection",
 	},
 	TEXT_MONEY = "money_text",
+	IMAGE_GAME_OVER = "restart",
+	BUTTON_RESTART = "btn_restart",
 }
 
 function init(self)
+	msg.post("#", Msg.START)
 end
 
 function final(self)
@@ -18,9 +22,18 @@ end
 function update(self, dt)
 end
 
+local function on_start(self)
+	
+end
+
 function on_message(self, message_id, message, sender)
 	if message_id == Msg.UPDATE_MONEY then
 		gui.set_text(gui.get_node(scheme.TEXT_MONEY), message.money)
+	elseif message_id == Msg.START then
+		on_start(self)
+	elseif message_id == Msg.GAME_OVER then
+		msg.post(".", "acquire_input_focus")
+		gui.set_enabled(gui.get_node(scheme.IMAGE_GAME_OVER), true)
 	elseif message_id == Msg.UPDATE_SELECTED_TOWER then
 		local tower_type = message.tower_type
 		for k, v in pairs(scheme.IMAGE_TABLE_SELECTIONS) do
@@ -31,6 +44,13 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+	if action_id == hash("touch") and action.pressed then
+		local button = gui.get_node(scheme.BUTTON_RESTART)
+		if gui.pick_node(button, action.x, action.y) then
+			gui.set_enabled(gui.get_node(scheme.IMAGE_GAME_OVER), false)
+			msg.post("/go#main", mesages.RESTART)
+		end
+	end
 end
 
 function on_reload(self)

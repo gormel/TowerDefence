@@ -35,7 +35,8 @@ return {
 	---@class BlocksTower : ecstasy.Component
 	BlocksTower = { }, 
 	---@class Tower : ecstasy.Component
-	Tower = {  },
+	---@field tower_type string
+	Tower = { reset = function(self) self.tower_type = "" end },
 	---@class TowerCreateRequest : ecstasy.Component
 	---@field tower_type string
 	TowerCreateRequest = { reset = function(self) self.tower_type = "" end },
@@ -92,7 +93,8 @@ return {
 	---@field initial_waypoint number
 	---@field reward number
 	---@field damage number
-	MonsterCreateRequest = { reset = function(self) self.hp = 100 self.initial_waypoint = nil self.reward = 0 self.damage = 1 end }, 
+	---@field speed number
+	MonsterCreateRequest = { reset = function(self) self.hp = 100 self.initial_waypoint = nil self.reward = 0 self.damage = 1 self.speed = 25 end }, 
 	---@class Velocity : ecstasy.Component
 	---@field x number
 	---@field y number

@@ -1,4 +1,5 @@
 local ecstasy = require "external.ecstasy"
+local setup   = require "ecs.setup"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -19,6 +20,7 @@ function ShootSystem:init()
     self.resource_components = self.world:get_table(Components.Resource)
     self.positions = self.world:get_table(Components.Position)
     self.destroy_on_no_targets = self.world:get_table(Components.DestroyOnNoTarget)
+    self.towers = self.world:get_table(Components.Tower)
 
     self.filter = self.world:create_filter(Components.Tower, Components.Target, Components.Damage, Components.Position)
 end
@@ -33,6 +35,7 @@ function ShootSystem:execute()
 
                 local damage = self.damages:get(entity)
                 local pos = self.positions:get(entity)
+                local tower = self.towers:get(entity)
 
                 local bullet_entity = self.world:new_entity()
                 local bullet_target = self.targets:add(bullet_entity)
@@ -50,7 +53,7 @@ function ShootSystem:execute()
 
                 local bullet_view_entity = self.world:new_entity()
                 local resource = self.resource_components:add(bullet_view_entity)
-                resource.factory_url = self.factory_url
+                resource.factory_url = setup.Towers[tower.tower_type].bullet_factory_url
                 local parent = self.parent_components:add(bullet_view_entity)
                 parent.entity = bullet_entity
                 self.attach_to_parent_components:add(bullet_view_entity)

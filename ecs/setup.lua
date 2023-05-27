@@ -12,10 +12,13 @@ return {
         monster_hp_progression = 1.5,
 		monster_reward_progression = 1.4,
         monster_damage_to_castle = 1,
+        speed = 25,
+        factory_url = "",
+        monster_factory_url = "/go#monster_factory",
     },
 
     CastleSetup = {
-        health = 20,
+        health = 1,
     },
 
     Towers = {
@@ -24,12 +27,14 @@ return {
             cost = 100,
             radius = Constants.CELL_SIZE * 2,
             damage = 50,
+            bullet_factory_url = "/go#bullet_factory",
         },
         [Constants.TOWER_TYPE_FREEZE] = {
             factory_url = "/go#freeze_tower_factory",
             cost = 150,
             radius = Constants.CELL_SIZE * 2,
             damage = 25,
+            bullet_factory_url = "/go#bullet_factory",
         },
     }
 }

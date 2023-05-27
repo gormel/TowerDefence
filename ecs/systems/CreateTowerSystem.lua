@@ -53,7 +53,8 @@ function CreateTowerSystem:execute()
 					money.value = money.value - tower_setup.cost
 					
 					local tower_entity = self.world:new_entity()
-					self.tower_components:add(tower_entity)
+					local tower = self.tower_components:add(tower_entity)
+					tower.tower_type = type
 					local tower_pos = self.position_components:add(tower_entity)
 					tower_pos.x = pos.x
 					tower_pos.y = pos.y

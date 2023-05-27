@@ -1,4 +1,5 @@
 local ecstasy = require "external.ecstasy"
+local setup   = require "ecs.setup"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -45,7 +46,7 @@ function CreateMonsterSystem:execute()
             local target = self.targets:add(monster_entity)
             target.target = request.initial_waypoint
             local follow_target = self.follow_targets:add(monster_entity)
-            follow_target.speed = 25
+            follow_target.speed = request.speed
             self.rotate_to_targets:add(monster_entity)
             local damage = self.damages:add(monster_entity)
             damage.value = request.damage
@@ -56,7 +57,7 @@ function CreateMonsterSystem:execute()
 
             local monster_view_entity = self.world:new_entity()
             local monster_res = self.resources:add(monster_view_entity)
-            monster_res.factory_url = self.factory_url
+            monster_res.factory_url = setup.MonsterSpawnerSetup.monster_factory_url
             local parent = self.parents:add(monster_view_entity)
             parent.entity = monster_entity
             self.attach_to_parents:add(monster_view_entity)
