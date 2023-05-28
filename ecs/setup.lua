@@ -6,7 +6,7 @@ return {
 		monster_interval = 2,
         wave_interval = 20,
         wave_size = 5,
-        monster_hp = 100,
+        monster_hp = 500,
 		monster_reward = 25,
         wave_size_progression = 1.2,
         monster_hp_progression = 1.5,
@@ -39,13 +39,28 @@ return {
             ApplyStatus = { "Frozen" },
             bullet_speed = 120,
         },
+        [Constants.TOWER_TYPE_POISON] = {
+            factory_url = "/go#poison_tower_factory",
+            cost = 150,
+            radius = Constants.CELL_SIZE * 2,
+            damage = 25,
+            bullet_factory_url = "/go#bullet_factory",
+            ApplyStatus = { "Poisoned" },
+            bullet_speed = 120,
+        },
     },
 
     Statuses = {
         ["Frozen"] = {
+            type = Constants.STATUS_TYPE_FROZEN,
             force = 0.5,
             duration = 5,
         },
-        ["Poisoned"] = {},
+        ["Poisoned"] = {
+            type = Constants.STATUS_TYPE_POISONED,
+            tick_time = 0.05,
+            tick_count = 10,
+            tick_damage = 5,
+        },
     },
 }

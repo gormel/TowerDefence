@@ -6,6 +6,7 @@ local scheme = {
 	IMAGE_TABLE_SELECTIONS = {
 		[Constants.TOWER_TYPE_COMMON] = "tmpl_common_tower/selection",
 		[Constants.TOWER_TYPE_FREEZE] = "tmpl_freeze_tower/selection",
+		[Constants.TOWER_TYPE_POISON] = "tmpl_poison_tower/selection",
 	},
 	TEXT_MONEY = "money_text",
 	IMAGE_GAME_OVER = "restart",

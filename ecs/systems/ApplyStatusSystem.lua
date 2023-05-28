@@ -1,5 +1,6 @@
 local ecstasy = require "external.ecstasy"
 local setup   = require "ecs.setup"
+local constants = require "ecs.constants"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -18,12 +19,17 @@ function ApplyStatusSystem:execute()
         local apply = self.applys:get(entity)
 
         for _, status in ipairs(apply.status) do
-            if status == "Frozen" then
+            local status_setup = setup.Statuses[status]
+            if status_setup.type == constants.STATUS_TYPE_FROZEN then
                 local frozen = self.frozens:get_or_add(entity)
-                frozen.cooldown = setup.Statuses[status].duration
-                frozen.power = setup.Statuses[status].force
-            elseif status == "Poisoned" then
-                self.poisoneds:get_or_add(entity)
+                frozen.cooldown = status_setup.duration
+                frozen.power = status_setup.force
+            elseif status_setup.type == constants.STATUS_TYPE_POISONED then
+                local poisoned = self.poisoneds:get_or_add(entity)
+                poisoned.cooldown = status_setup.tick_time
+                poisoned.tick_time = status_setup.tick_time
+                poisoned.tick_count =  status_setup.tick_count
+                poisoned.tick_damage = status_setup.tick_damage
             end
         end
 

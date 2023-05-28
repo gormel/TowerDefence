@@ -127,7 +127,10 @@ return {
 	Frozen = { reset = function(self) self.cooldown = 0 self.power = 1 end }, 
 	---@class Poisoned : ecstasy.Component
 	---@field cooldown number
-	Poisoned = { reset = function(self) self.cooldown = 0 end }, 
+	---@field tick_time number
+	---@field tick_count number
+	---@field tick_damage number
+	Poisoned = { reset = function(self) self.cooldown = 0 self.tick_time = 0 self.tick_count = 0 self.tick_damage = 0 end }, 
 	---@class DestroyOnNoTarget : ecstasy.Component
 	DestroyOnNoTarget = { }, 
 	---@class Reward : ecstasy.Component
