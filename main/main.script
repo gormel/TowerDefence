@@ -143,7 +143,7 @@ function init(self)
 	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
 	
 	local seed = os.time()
-	math.randomseed(seed)
+	math.randomseed(seed or 5)
 
 	self.world = DefWorld:new()
 	
@@ -223,8 +223,9 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == mesages.GAME_OVER then
 		msg.post("/gui#gui", mesages.GAME_OVER)
+	elseif message_id == mesages.SELECT_TOWER then
+		select_tower_build(self, message.tower_type)
 	elseif message_id == mesages.RESTART then
-		msg.post(".", "acquire_input_focus")
 		init_game(self)
 	end
 end

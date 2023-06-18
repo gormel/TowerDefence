@@ -17,11 +17,14 @@ return {
         monster_factory_url = "/go#monster_factory",
     },
 
+    ---@class CastleSetup
     CastleSetup = {
         health = 1,
     },
 
+    ---@type TowerSetup[]
     Towers = {
+        ---@class TowerSetup
         [Constants.TOWER_TYPE_COMMON] = {
             factory_url = "/go#common_tower_factory",
             cost = 100,
@@ -29,6 +32,7 @@ return {
             damage = 50,
             bullet_factory_url = "/go#bullet_factory",
             bullet_speed = 120,
+            button_template = "tmpl_common_tower",
         },
         [Constants.TOWER_TYPE_FREEZE] = {
             factory_url = "/go#freeze_tower_factory",
@@ -38,6 +42,7 @@ return {
             bullet_factory_url = "/go#bullet_factory",
             ApplyStatus = { "Frozen" },
             bullet_speed = 120,
+            button_template = "tmpl_freeze_tower",
         },
         [Constants.TOWER_TYPE_POISON] = {
             factory_url = "/go#poison_tower_factory",
@@ -47,6 +52,7 @@ return {
             bullet_factory_url = "/go#bullet_factory",
             ApplyStatus = { "Poisoned" },
             bullet_speed = 120,
+            button_template = "tmpl_poison_tower",
         },
     },
 
