@@ -146,4 +146,8 @@ return {
 	---@class ApplyStatusOnTargetReached : ecstasy.Component
 	---@field status status[]
 	ApplyStatusToTargetOnTargetReached = { reset = function(self) self.status = {} end }, 
+	---@class Blocked : ecstasy.Component
+	Blocked = { reset = function(self) self.blocker_entities = {} end }, 
+	---@class Blocker : ecstasy.Component
+	Blocker = { reset = function(self)  end }, 
 }

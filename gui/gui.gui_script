@@ -12,6 +12,7 @@ local scheme = {
 	TEXT_MONEY = "money_text",
 	IMAGE_GAME_OVER = "restart",
 	BUTTON_RESTART = "btn_restart",
+	BUTTON_NEXT_WAVE = "btn_next_wave",
 }
 
 function init(self)

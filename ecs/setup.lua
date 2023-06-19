@@ -32,6 +32,7 @@ return {
             damage = 50,
             bullet_factory_url = "/go#bullet_factory",
             bullet_speed = 120,
+            ApplyStatus = {},
             button_template = "tmpl_common_tower",
         },
         [Constants.TOWER_TYPE_FREEZE] = {
