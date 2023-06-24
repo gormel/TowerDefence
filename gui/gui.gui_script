@@ -1,4 +1,3 @@
-local Msg = require("main.mesages")
 local Constants = require("ecs.constants")
 local mesages   = require("main.mesages")
 local setup     = require("ecs.setup")
@@ -17,7 +16,7 @@ local scheme = {
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#", Msg.START)
+	msg.post("#", mesages.START)
 end
 
 function final(self)
@@ -30,13 +29,17 @@ local function add_button(self, node, callback)
 	table.insert(self.buttons, { node = node, callback = callback })
 end
 
+local function on_next_wave_click(self)
+	msg.post(Constants.URL_MAIN, mesages.NEXT_WAVE)
+end
+
 local function on_restart_click(self)
 	gui.set_enabled(gui.get_node(scheme.IMAGE_GAME_OVER), false)
-	msg.post("/go#main", mesages.RESTART)
+	msg.post(Constants.URL_MAIN, mesages.RESTART)
 end
 
 local function on_select_click(self, tower_type)
-	msg.post("/go#main", mesages.SELECT_TOWER, { tower_type = tower_type })
+	msg.post(Constants.URL_MAIN, mesages.SELECT_TOWER, { tower_type = tower_type })
 end
 
 local function get_tower_node(tower_setup, fragment)
@@ -47,6 +50,7 @@ local function on_start(self)
 	self.buttons = {}
 
 	add_button(self, gui.get_node(scheme.BUTTON_RESTART), on_restart_click)
+	add_button(self, gui.get_node(scheme.BUTTON_NEXT_WAVE), on_next_wave_click)
 	for tower_setup_type, tower_setup in pairs(setup.Towers) do
 		local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.BUTTON)
 		local tower_type = tower_setup_type
@@ -55,13 +59,15 @@ local function on_start(self)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == Msg.UPDATE_MONEY then
+	if message_id == mesages.UPDATE_MONEY then
 		gui.set_text(gui.get_node(scheme.TEXT_MONEY), message.money)
-	elseif message_id == Msg.START then
+	elseif message_id == mesages.START then
 		on_start(self)
-	elseif message_id == Msg.GAME_OVER then
+	elseif message_id == mesages.UPDATE_IDLE_STATE then
+		gui.set_enabled(gui.get_node(scheme.BUTTON_NEXT_WAVE), message.state)
+	elseif message_id == mesages.GAME_OVER then
 		gui.set_enabled(gui.get_node(scheme.IMAGE_GAME_OVER), true)
-	elseif message_id == Msg.UPDATE_SELECTED_TOWER then
+	elseif message_id == mesages.UPDATE_SELECTED_TOWER then
 		local tower_type = message.tower_type
 		for tower_setup_type, tower_setup in pairs(setup.Towers) do
 			local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.SELECTED)

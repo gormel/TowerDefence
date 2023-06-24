@@ -6,7 +6,7 @@ return {
 		monster_interval = 2,
         wave_interval = 20,
         wave_size = 5,
-        monster_hp = 500,
+        monster_hp = 100,
 		monster_reward = 25,
         wave_size_progression = 1.2,
         monster_hp_progression = 1.5,

@@ -96,7 +96,8 @@ return {
 	---@field reward number
 	---@field damage number
 	---@field speed number
-	MonsterCreateRequest = { reset = function(self) self.hp = 100 self.initial_waypoint = nil self.reward = 0 self.damage = 1 self.speed = 25 end }, 
+	---@field monster_entity? number
+	MonsterCreateRequest = { reset = function(self) self.monster_entity = nil self.hp = 100 self.initial_waypoint = nil self.reward = 0 self.damage = 1 self.speed = 25 end }, 
 	---@class Velocity : ecstasy.Component
 	---@field x number
 	---@field y number
@@ -147,7 +148,10 @@ return {
 	---@field status status[]
 	ApplyStatusToTargetOnTargetReached = { reset = function(self) self.status = {} end }, 
 	---@class Blocked : ecstasy.Component
+	---@field blocker_entities number[]
 	Blocked = { reset = function(self) self.blocker_entities = {} end }, 
 	---@class Blocker : ecstasy.Component
 	Blocker = { reset = function(self)  end }, 
+	---@class NextWaveRequest : ecstasy.Component
+	NextWaveRequest = { reset = function(self)  end }, 
 }

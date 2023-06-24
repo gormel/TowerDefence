@@ -1,4 +1,5 @@
 local ecstasy = require "external.ecstasy"
+local const = require "ecs.constants"
 local exc, added, removed = ecstasy.exc, ecstasy.added, ecstasy.removed
 local Components = require("ecs.components")
 local Msg = require("main.mesages")
@@ -11,7 +12,7 @@ end
 
 function RenderMoneySystem:execute()
 	for _, money in self.money_components:components() do
-		msg.post("/gui#gui", Msg.UPDATE_MONEY, { money = money.value })
+		msg.post(const.URL_GUI, Msg.UPDATE_MONEY, { money = money.value })
 	end
 end
 

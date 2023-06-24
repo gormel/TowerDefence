@@ -1,3 +1,4 @@
+---@class Constants
 return {
 	TOWER_TYPE_COMMON = "common",
 	TOWER_TYPE_FREEZE = "freeze",
@@ -7,4 +8,7 @@ return {
 	STATUS_TYPE_POISONED = "Poisoned",
 
 	CELL_SIZE = 64,
+
+	URL_MAIN = "/go#main",
+	URL_GUI = "/gui#gui",
 }

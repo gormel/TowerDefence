@@ -1,4 +1,6 @@
 local ecstasy = require "external.ecstasy"
+local Constants = require "ecs.constants"
+local mesages = require "main.mesages"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -11,17 +13,20 @@ function SpawnMonsterSystem:init()
     self.wave_numbers = self.world:get_table(Components.WaveNumber)
     self.cooldowns = self.world:get_table(Components.Cooldown)
     self.requests = self.world:get_table(Components.MonsterCreateRequest)
+    self.blockeds = self.world:get_table(Components.Blocked)
+    self.blockers = self.world:get_table(Components.Blocker)
 
-    self.filter = self.world:create_filter(Components.MonsterSpawner, Components.Position)
+    self.filter = self.world:create_filter(Components.MonsterSpawner, Components.Position, Components.Cooldown)
 end
 
 function SpawnMonsterSystem:execute()
     for _, entity in self.filter:entities() do
-        local cooldown = self.cooldowns:get_or_add(entity)
+        local cooldown = self.cooldowns:get(entity)
         if cooldown.value <= 0 then
             local setup = self.spawners:get(entity)
             local pos = self.positions:get(entity)
 
+            local blocked = self.blockeds:add(entity)
             for i = 1, math.floor(setup.setup.wave_size * math.pow(setup.setup.wave_size_progression, setup.wave)), 1 do
                 local req_entity = self.world:new_entity()
                 local req_cd = self.cooldowns:add(req_entity)
@@ -32,12 +37,17 @@ function SpawnMonsterSystem:execute()
                 req.reward = math.floor(setup.setup.monster_reward * math.pow(setup.setup.monster_reward_progression, setup.wave))
                 req.damage = setup.setup.monster_damage_to_castle
                 req.speed = setup.setup.speed
+                req.monster_entity = self.world:new_entity()
                 local req_pos = self.positions:add(req_entity)
                 req_pos.x = pos.x
                 req_pos.y = pos.y
+
+                self.blockers:add(req.monster_entity)
+                table.insert(blocked.blocker_entities, req.monster_entity)
             end
 
-            cooldown.value = setup.setup.wave_interval + setup.setup.wave_size * setup.setup.monster_interval
+            msg.post(Constants.URL_GUI, mesages.UPDATE_IDLE_STATE, { state = false })
+            self.cooldowns:del(entity)
             setup.wave = setup.wave + 1
         end
     end

@@ -69,7 +69,7 @@ end
 local function reverse_iterator(self, index)
     local base_table = self._conditions_tables[1]
     index = index or #base_table._entities + 1
-    for i = index - 1, 0, -1 do
+    for i = index - 1, 1, -1 do
         local entity = base_table._entities[i]
         if check_conditions(self, entity, 2) then
             return i, entity

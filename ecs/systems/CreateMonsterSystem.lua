@@ -37,7 +37,7 @@ function CreateMonsterSystem:execute()
             local request = self.requests:get(entity)
             local position = self.positions:get(entity)
 
-            local monster_entity = self.world:new_entity()
+            local monster_entity = request.monster_entity or self.world:new_entity()
             local monster_pos = self.positions:add(monster_entity)
             monster_pos.x = position.x
             monster_pos.y = position.y

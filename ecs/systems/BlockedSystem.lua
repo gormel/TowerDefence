@@ -12,6 +12,19 @@ function BlockedSystem:init()
 end
 
 function BlockedSystem:execute()
+    for _, entity in self.blockeds:reverse_entities() do
+        local blocked = self.blockeds:get(entity)
+        for i = #blocked.blocker_entities, 1, -1 do
+            local blocker_entity = blocked.blocker_entities[i]
+            if not self.blockers:has(blocker_entity) then
+                table.remove(blocked.blocker_entities, i)
+            end
+        end
+
+        if #blocked.blocker_entities < 1 then
+            self.blockeds:del(entity)
+        end
+    end
 end
 
 return BlockedSystem

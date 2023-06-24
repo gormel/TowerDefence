@@ -1068,7 +1068,7 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "next_wave"
+  id: "btn_next_wave"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -1126,7 +1126,7 @@ nodes {
   blend_mode: BLEND_MODE_ALPHA
   text: "Next Wave"
   font: "system_font"
-  id: "next_wave_text"
+  id: "btn_next_wave_text"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -1144,7 +1144,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "next_wave"
+  parent: "btn_next_wave"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
