@@ -8,4 +8,5 @@ return {
     SELECT_TOWER          = hash("select_tower"),
     UPDATE_IDLE_STATE     = hash("update_idle_state"),
     NEXT_WAVE             = hash("next_wave"),
+    UPDATE_WAVE_INDEX     = hash("update_wave_index"),
 }

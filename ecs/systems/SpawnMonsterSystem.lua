@@ -47,6 +47,7 @@ function SpawnMonsterSystem:execute()
             end
 
             msg.post(Constants.URL_GUI, mesages.UPDATE_IDLE_STATE, { state = false })
+            msg.post(Constants.URL_GUI, mesages.UPDATE_WAVE_INDEX, { wave = setup.wave })
             self.cooldowns:del(entity)
             setup.wave = setup.wave + 1
         end
