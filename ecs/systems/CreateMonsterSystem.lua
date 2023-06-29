@@ -1,5 +1,6 @@
 local ecstasy = require "external.ecstasy"
 local setup   = require "ecs.setup"
+local constants = require "ecs.constants"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -43,6 +44,7 @@ function CreateMonsterSystem:execute()
             monster_pos.y = position.y
             local health = self.healths:add(monster_entity)
             health.value = request.hp
+            health.max_value = request.hp
             self.monsters:add(monster_entity)
             local target = self.targets:add(monster_entity)
             target.target = request.initial_waypoint

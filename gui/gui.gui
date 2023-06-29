@@ -9,7 +9,7 @@ textures {
 }
 textures {
   name: "towers"
-  texture: "/assets/prefabs/towers.atlas"
+  texture: "/assets/images/atlases/game.atlas"
 }
 background_color {
   x: 0.0

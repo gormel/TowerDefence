@@ -1,7 +1,7 @@
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/assets/prefabs/towers.atlas\"\n"
+  data: "tile_set: \"/assets/images/atlases/game.atlas\"\n"
   "default_animation: \"common_tower\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

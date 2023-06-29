@@ -4,7 +4,7 @@
         "scope": "lua",
         "body": [
             "---@class ${1:Component} : ecstasy.Component",
-            "${1} = { reset = function(self) $0 end }, "
+            "${1} = { reset = function(self) $0 end },"
         ]
     },
     "Create Ecstasy System": {

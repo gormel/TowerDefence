@@ -53,9 +53,9 @@ function ShootSystem:execute()
                 local bullet_pos = self.positions:add(bullet_entity)
                 bullet_pos.x = pos.x
                 bullet_pos.y = pos.y
-                if setup.Towers[tower.tower_type].ApplyStatus ~= nil then
+                if setup.Towers[tower.tower_type].apply_status ~= nil then
                     local bullet_apply_status = self.status_applys:add(bullet_entity)
-                    for _, status in ipairs(setup.Towers[tower.tower_type].ApplyStatus) do
+                    for _, status in ipairs(setup.Towers[tower.tower_type].apply_status) do
                         table.insert(bullet_apply_status.status, status)
                     end
                 end

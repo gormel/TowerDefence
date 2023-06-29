@@ -15,14 +15,18 @@ function AttachToParentSystem:execute()
         local parent_position = self.world:get_component(Components.Position, parent.entity)
         local parent_rotation = self.world:get_or_add_component(Components.Rotation, parent.entity)
         if (parent_position ~= nil) then
-            local position = self.world:get_or_add_component(Components.Position, entity)
             local offset = self.world:get_component(Components.AttachToParent, entity)
-            local rotation = self.world:get_or_add_component(Components.Rotation, entity)
 
-            position.x = parent_position.x + offset.dx
-            position.y = parent_position.y + offset.dy
+            if offset.sync_position then
+                local position = self.world:get_or_add_component(Components.Position, entity)
+                position.x = parent_position.x + offset.dx
+                position.y = parent_position.y + offset.dy
+            end
 
-            rotation.angle = parent_rotation.angle + offset.drot
+            if offset.sync_angle then
+                local rotation = self.world:get_or_add_component(Components.Rotation, entity)
+                rotation.angle = parent_rotation.angle + offset.da
+            end
         end
     end
 end

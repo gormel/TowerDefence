@@ -1,7 +1,7 @@
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/assets/prefabs/ui.atlas\"\n"
+  data: "tile_set: \"/assets/images/atlases/ui.atlas\"\n"
   "default_animation: \"cursor\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

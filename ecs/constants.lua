@@ -11,4 +11,6 @@ return {
 
 	URL_MAIN = "/go#main",
 	URL_GUI = "/gui#gui",
+
+	FACTORY_URL_HP_BAR = "/go#hp_bar_factory",
 }
