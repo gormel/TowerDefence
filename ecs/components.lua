@@ -128,7 +128,8 @@ return {
 	---@class Frozen : ecstasy.Component
 	---@field cooldown number
 	---@field power number
-	Frozen = { reset = function(self) self.cooldown = 0 self.power = 1 end },
+	---@field status_id string
+	Frozen = { reset = function(self) self.cooldown = 0 self.power = 1 self.status_id = nil end },
 	---@class Poisoned : ecstasy.Component
 	---@field cooldown number
 	---@field tick_time number
@@ -163,4 +164,9 @@ return {
 	---@class HasHealthBar : ecstasy.Component
 	---@field entity number
 	HasHealthBar = { reset = function(self) self.entity = 0 end },
+	---@class FrozenStatus : ecstasy.Component
+	FrozenStatus = { reset = function(self)  end },
+	---@class HasFrozenStatus : ecstasy.Component
+	---@field entity number
+	HasFrozenStatus = { reset = function(self) self.entity = 0 end },
 }

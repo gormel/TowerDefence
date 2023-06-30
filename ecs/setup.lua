@@ -62,6 +62,7 @@ return {
             type = Constants.STATUS_TYPE_FROZEN,
             force = 0.5,
             duration = 5,
+            factory_url = "/go#freeze_status_factory"
         },
         ["Poisoned"] = {
             type = Constants.STATUS_TYPE_POISONED,

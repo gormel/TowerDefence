@@ -24,12 +24,14 @@ function ApplyStatusSystem:execute()
                 local frozen = self.frozens:get_or_add(entity)
                 frozen.cooldown = status_setup.duration
                 frozen.power = status_setup.force
+                frozen.status_id = status
             elseif status_setup.type == constants.STATUS_TYPE_POISONED then
                 local poisoned = self.poisoneds:get_or_add(entity)
                 poisoned.cooldown = status_setup.tick_time
                 poisoned.tick_time = status_setup.tick_time
                 poisoned.tick_count =  status_setup.tick_count
                 poisoned.tick_damage = status_setup.tick_damage
+                poisoned.status_id = status
             end
         end
 
