@@ -48,6 +48,7 @@ local NextWaveSystem                   = require("ecs.systems.NextWaveSystem")
 local RenderHealthSystem               = require("ecs.systems.RenderHealthSystem")
 local AttachHealthBarSystem            = require("ecs.systems.AttachHealthBarSystem")
 local AttachFrozenStatusSystem         = require("ecs.systems.AttachFrozenStatusSystem")
+local AttachPoisonedStatusSystem       = require("ecs.systems.AttachPoisonedStatusSystem")
 
 local DefWorld                         = ecstasy.World()
 
@@ -179,6 +180,7 @@ function init(self)
 	self.systems:register(BlockedSystem)
 	self.systems:register(AttachHealthBarSystem)
 	self.systems:register(AttachFrozenStatusSystem)
+	self.systems:register(AttachPoisonedStatusSystem)
 
 	self.systems:register(LaunchMonsterSpawnerSystem)
 	self.systems:register(ApplyStatusSystem)

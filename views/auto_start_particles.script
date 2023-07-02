@@ -3,3 +3,7 @@ go.property("particle_fx", msg.url("#particlefx"))
 function init(self)
 	particlefx.play(self.particle_fx)
 end
+
+function final(self)
+	particlefx.stop(self.particle_fx, { clear = true })
+end
