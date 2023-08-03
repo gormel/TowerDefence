@@ -1,0 +1,4 @@
+fix: poison and freeze towers are targeting not poisoned and not frozen targets in first order
+fea: tower selection: show name, stats, kills
+fea: tower upgrade UI
+fea: tower upgrade logic

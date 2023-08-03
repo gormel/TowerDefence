@@ -1,7 +1,7 @@
 local Constants = require "ecs.constants"
 
 return {
-    ---@class MonsterSpawnerSetup
+    ---@class setup.MonsterSpawnerSetup
     MonsterSpawnerSetup = {
 		monster_interval = 2,
         wave_interval = 20,
@@ -13,18 +13,17 @@ return {
 		monster_reward_progression = 1.4,
         monster_damage_to_castle = 1,
         speed = 25,
-        factory_url = "",
         monster_factory_url = "/go#monster_factory",
     },
 
-    ---@class CastleSetup
+    ---@class setup.CastleSetup
     CastleSetup = {
         health = 1,
     },
 
-    ---@type TowerSetup[]
+    ---@type table<string, setup.TowerSetup>
     Towers = {
-        ---@class TowerSetup
+        ---@class setup.TowerSetup
         [Constants.TOWER_TYPE_COMMON] = {
             factory_url = "/go#common_tower_factory",
             cost = 100,
@@ -57,18 +56,32 @@ return {
         },
     },
 
+    ---@type table<string, setup.TargetFiletr>
+    TargetFilters = {
+        ---@class setup.TargetFiletr
+        ["NonPoisonedFilter"] = {
+            exc_status_types = { Constants.STATUS_TYPE_POISONED },
+        },
+        ["NonFrozenFilter"] = {
+            exc_status_types = { Constants.STATUS_TYPE_FROZEN },
+        },
+    },
+
     Statuses = {
+        ---@class setup.FrozenStatus
         ["Frozen"] = {
             type = Constants.STATUS_TYPE_FROZEN,
             force = 0.5,
             duration = 5,
-            factory_url = "/go#freeze_status_factory"
+            factory_url = "/go#freeze_status_factory",
         },
+        ---@class setup.PoisonedStatus
         ["Poisoned"] = {
             type = Constants.STATUS_TYPE_POISONED,
             tick_time = 0.05,
             tick_count = 10,
             tick_damage = 5,
+            factory_url = "/go#poison_status_factory",
         },
     },
 }

@@ -65,9 +65,11 @@ function CreateTowerSystem:execute()
 					local damage = self.damage_components:add(tower_entity)
 					damage.value = tower_setup.damage
 
+					local target_strategy = self.target_monster_in_view_radius_components:add(tower_entity)
+					
+
 					self.rotate_to_target_components:add(tower_entity)
 					self.free_out_of_view_target_components:add(tower_entity)
-					self.target_monster_in_view_radius_components:add(tower_entity)
 					self.blocks_tower_components:add(tower_entity)
 
 					local tower_view_entity = self.world:new_entity()
