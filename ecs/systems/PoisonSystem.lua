@@ -13,7 +13,7 @@ function PoisonSystem:init()
 end
 
 function PoisonSystem:execute(dt)
-    for _, entity in self.filter:entities() do
+    for _, entity in self.filter:reverse_entities() do
         local poisoned = self.poisoneds:get(entity)
         local health = self.healths:get(entity)
 
@@ -22,6 +22,10 @@ function PoisonSystem:execute(dt)
             poisoned.cooldown = poisoned.tick_time
             poisoned.tick_count = poisoned.tick_count - 1
             health.value = health.value - poisoned.tick_damage
+        end
+
+        if poisoned.tick_count <= 0 then
+            self.poisoneds:del(entity)
         end
     end
 end

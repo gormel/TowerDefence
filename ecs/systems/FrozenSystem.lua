@@ -13,7 +13,7 @@ function FrozenSystem:init()
 end
 
 function FrozenSystem:execute(dt)
-    for _, entity in self.filter:entities() do
+    for _, entity in self.filter:reverse_entities() do
         local frozen = self.frozens:get(entity)
         frozen.cooldown = frozen.cooldown - dt
         local speed = self.speeds:safe_get(entity)
