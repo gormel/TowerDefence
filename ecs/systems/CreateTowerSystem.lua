@@ -21,6 +21,7 @@ function CreateTowerSystem:init()
 	self.view_radius_components = self.world:get_table(Components.ViewRadius)
 	self.blocks_tower_components = self.world:get_table(Components.BlocksTower)
 	self.damage_components = self.world:get_table(Components.Damage)
+	self.filter_components = self.world:get_table(Components.TargetFilters)
 	
 	self.requests_filter = self.world:create_filter(Components.TowerCreateRequest, Components.Position)
 	self.towers_filter = self.world:create_filter(Components.BlocksTower, Components.Position)
@@ -65,9 +66,14 @@ function CreateTowerSystem:execute()
 					local damage = self.damage_components:add(tower_entity)
 					damage.value = tower_setup.damage
 
-					local target_strategy = self.target_monster_in_view_radius_components:add(tower_entity)
-					
+					if #tower_setup.target_filters > 0 then
+						local filters = self.filter_components:add(tower_entity)
+						for _, filter in ipairs(tower_setup.target_filters) do
+							table.insert(filters.filters, filter)
+						end
+					end
 
+					self.target_monster_in_view_radius_components:add(tower_entity)
 					self.rotate_to_target_components:add(tower_entity)
 					self.free_out_of_view_target_components:add(tower_entity)
 					self.blocks_tower_components:add(tower_entity)

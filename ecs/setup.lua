@@ -33,6 +33,7 @@ return {
             bullet_speed = 120,
             apply_status = {},
             button_template = "tmpl_common_tower",
+            target_filters = {},
         },
         [Constants.TOWER_TYPE_FREEZE] = {
             factory_url = "/go#freeze_tower_factory",
@@ -43,6 +44,7 @@ return {
             apply_status = { "Frozen" },
             bullet_speed = 120,
             button_template = "tmpl_freeze_tower",
+            target_filters = { "NonFrozenFilter" },
         },
         [Constants.TOWER_TYPE_POISON] = {
             factory_url = "/go#poison_tower_factory",
@@ -53,6 +55,7 @@ return {
             apply_status = { "Poisoned" },
             bullet_speed = 120,
             button_template = "tmpl_poison_tower",
+            target_filters = { "NonPoisonedFilter" },
         },
     },
 
@@ -61,9 +64,11 @@ return {
         ---@class setup.TargetFiletr
         ["NonPoisonedFilter"] = {
             exc_status_types = { Constants.STATUS_TYPE_POISONED },
+            no_exceptions = false,
         },
         ["NonFrozenFilter"] = {
             exc_status_types = { Constants.STATUS_TYPE_FROZEN },
+            no_exceptions = false,
         },
     },
 

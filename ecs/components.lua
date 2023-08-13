@@ -113,6 +113,9 @@ return {
 	Waypoint = { reset = function(self) self.next = 0 end },
 	---@class TargetMonsterInViewRadius : ecstasy.Component
 	TargetMonsterInViewRadius = {  },
+	---@class TargetFilters : ecstasy.Component
+	---@field filters string[]
+	TargetFilters = { reset = function(self) self.filters = {} end },
 	---@class FreeOutOfViewTarget : ecstasy.Component
 	FreeOutOfViewTarget = { },
 	---@class Damage : ecstasy.Component
