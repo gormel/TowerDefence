@@ -21,6 +21,7 @@ function AttachToParentSystem:execute()
                 local position = self.world:get_or_add_component(Components.Position, entity)
                 position.x = parent_position.x + offset.dx
                 position.y = parent_position.y + offset.dy
+                position.z = parent_position.z + offset.dz
             end
 
             if offset.sync_angle then

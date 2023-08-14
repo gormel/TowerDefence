@@ -3,6 +3,7 @@ local exc, added, removed = ecstasy.exc, ecstasy.added, ecstasy.removed
 local Components = require("ecs.components")
 local Constants = require("ecs.constants")
 
+---@class RequestTowerSystem : ecstasy.System
 local RequestTowerSystem = ecstasy.System("RequestTowerSystem")
 
 function RequestTowerSystem:init()

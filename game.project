@@ -28,3 +28,6 @@ input_method = HiddenInputField
 gravity_y = -1000.0
 scale = 0.01
 
+[sprite]
+max_count = 1024
+

@@ -7,6 +7,8 @@ local DestroyByHealthSystem = ecstasy.System("DestroyByHealthSystem")
 
 function DestroyByHealthSystem:init()
     self.healths = self.world:get_table(Components.Health)
+    self.sources = self.world:get_table(Components.LastDamageSource)
+    self.kill_counters = self.world:get_table(Components.KillCounter)
     self.destroyeds = self.world:get_table(Components.Destroyed)
 end
 
@@ -15,6 +17,11 @@ function DestroyByHealthSystem:execute()
         local hp = self.healths:get(entity)
         if hp.value <= 0 then
             self.destroyeds:add(entity)
+            local source = self.sources:safe_get(entity)
+            if source ~= nil and self.kill_counters:has(source.source_entity) then
+                local counter = self.kill_counters:get(source.source_entity)
+                counter.value = counter.value + 1
+            end
         end
     end
 end

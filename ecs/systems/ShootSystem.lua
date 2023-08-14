@@ -1,5 +1,6 @@
 local ecstasy = require "external.ecstasy"
 local setup   = require "ecs.setup"
+local const = require "ecs.constants"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -23,6 +24,7 @@ function ShootSystem:init()
     self.towers = self.world:get_table(Components.Tower)
     self.status_applys = self.world:get_table(Components.ApplyStatusToTargetOnTargetReached)
     self.speeds = self.world:get_table(Components.Speed)
+    self.transporters = self.world:get_table(Components.DamageTransporter)
 
     self.filter = self.world:create_filter(Components.Tower, Components.Target, Components.Damage, Components.Position)
 end
@@ -33,13 +35,15 @@ function ShootSystem:execute()
         if self.healths:has(target.target) then
             local cooldown = self.cooldowns:get_or_add(entity)
             if cooldown.value <= 0 then
-                cooldown.value = 0.5
+                cooldown.value = const.SHOOT_DELAY
 
                 local damage = self.damages:get(entity)
                 local pos = self.positions:get(entity)
                 local tower = self.towers:get(entity)
 
                 local bullet_entity = self.world:new_entity()
+                local bullet_transporter = self.transporters:add(bullet_entity)
+                bullet_transporter.dealer_entity = entity
                 local bullet_target = self.targets:add(bullet_entity)
                 bullet_target.target = target.target
                 local bullet_damage = self.damages:add(bullet_entity)
@@ -55,6 +59,7 @@ function ShootSystem:execute()
                 bullet_pos.y = pos.y
                 if setup.Towers[tower.tower_type].apply_status ~= nil then
                     local bullet_apply_status = self.status_applys:add(bullet_entity)
+                    bullet_apply_status.source_entity = entity
                     for _, status in ipairs(setup.Towers[tower.tower_type].apply_status) do
                         table.insert(bullet_apply_status.status, status)
                     end

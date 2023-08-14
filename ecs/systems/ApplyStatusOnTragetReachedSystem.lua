@@ -19,6 +19,7 @@ function ApplyStatusOnTargetReachedSystem:execute()
         local reached = self.reacheds:get(entity)
 
         local apply = self.applys:get_or_add(reached.target)
+        apply.source_entity = trigger.source_entity
         for _, status in ipairs(trigger.status) do
             table.insert(apply.status, status)
         end

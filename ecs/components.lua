@@ -22,7 +22,8 @@ return {
 	---@class Position : ecstasy.Component
 	---@field x number
 	---@field y number
-	Position = { reset = function(self) self.x = 0 self.y = 0 end },
+	---@field z number
+	Position = { reset = function(self) self.x = 0 self.y = 0 self.z = 0 end },
 	---@class Rotation : ecstasy.Component
 	---@field angle number
 	Rotation = { reset = function(self)	self.angle = 0 end },
@@ -77,12 +78,13 @@ return {
 	---@class AttachToParent : ecstasy.Component
 	---@field dx number
 	---@field dy number
+	---@field dz number
 	---@field da number
 	---@field sync_position boolean
 	---@field sync_angle boolean
-	AttachToParent = { reset = function(self) self.dx = 0 self.dy = 0 self.da = 0 self.sync_position = true self.sync_angle = true end },
+	AttachToParent = { reset = function(self) self.dx = 0 self.dy = 0 self.dz = 0 self.da = 0 self.sync_position = true self.sync_angle = true end },
 	---@class MonsterSpawner : ecstasy.Component
-	---@field setup MonsterSpawnerSetup
+	---@field setup setup.MonsterSpawnerSetup
 	---@field wave number
 	MonsterSpawner = { reset = function (self) self.setup = nil self.wave = 1 end },
 	---@class WaveNumber : ecstasy.Component
@@ -132,7 +134,8 @@ return {
 	---@field cooldown number
 	---@field power number
 	---@field status_id string
-	Frozen = { reset = function(self) self.cooldown = 0 self.power = 1 self.status_id = nil end },
+	---@field source_entity number
+	Frozen = { reset = function(self) self.cooldown = 0 self.power = 1 self.status_id = nil self.source = 0 end },
 	---@class FrozenStatus : ecstasy.Component
 	FrozenStatus = { reset = function(self)  end },
 	---@class HasFrozenStatus : ecstasy.Component
@@ -144,7 +147,8 @@ return {
 	---@field tick_count number
 	---@field tick_damage number
 	---@field status_id string
-	Poisoned = { reset = function(self) self.cooldown = 0 self.tick_time = 0 self.tick_count = 0 self.tick_damage = 0 self.status_id = nil end },
+	---@field source_entity number
+	Poisoned = { reset = function(self) self.cooldown = 0 self.tick_time = 0 self.tick_count = 0 self.tick_damage = 0 self.status_id = nil self.source_entity = 0 end },
 	---@class PoisonedStatus : ecstasy.Component
 	PoisonedStatus = { reset = function(self)  end },
 	---@class HasPoisonedStatus : ecstasy.Component
@@ -161,10 +165,12 @@ return {
 	Castle = { reset = function(self)  end },
 	---@class ApplyStatus : ecstasy.Component
 	---@field status status[]
-	ApplyStatus = { reset = function(self) self.status = {} end },
+	---@field source_entity number
+	ApplyStatus = { reset = function(self) self.status = {} self.source_entity = 0 end },
 	---@class ApplyStatusOnTargetReached : ecstasy.Component
 	---@field status status[]
-	ApplyStatusToTargetOnTargetReached = { reset = function(self) self.status = {} end },
+	---@field source_entity number
+	ApplyStatusToTargetOnTargetReached = { reset = function(self) self.status = {} self.source_entity = 0 end },
 	---@class Blocked : ecstasy.Component
 	---@field blocker_entities number[]
 	Blocked = { reset = function(self) self.blocker_entities = {} end },
@@ -178,4 +184,25 @@ return {
 	---@class HasHealthBar : ecstasy.Component
 	---@field entity number
 	HasHealthBar = { reset = function(self) self.entity = 0 end },
+	---@class Selected : ecstasy.Component
+	Selected = { reset = function(self)  end },
+	---@class SelectionView : ecstasy.Component
+	SelectionView = { reset = function(self)  end },
+	---@class HasSelectionView : ecstasy.Component
+	---@field view_entity number
+	HasSelectionView = { reset = function(self) self.view_entity = 0 end },
+	---@class KillCounter : ecstasy.Component
+	---@field value number
+	KillCounter = { reset = function(self) self.value = 0 end },
+	---@class LastDamageSource : ecstasy.Component
+	---@field source_entity number
+	LastDamageSource = { reset = function(self) self.source_entity = 0 end },
+	---@class DamageTransporter : ecstasy.Component
+	---@field dealer_entity number
+	DamageTransporter = { reset = function(self) self.dealer_entity = 0 end },
+	---@class DealDamage : ecstasy.Component
+	---@field target_entities number[]
+	DealDamage = { reset = function(self) self.target_entities = {} end },
+	---@class PoisonDamageDealer : ecstasy.Component
+	PoisonDamageDealer = { reset = function(self)  end },
 }

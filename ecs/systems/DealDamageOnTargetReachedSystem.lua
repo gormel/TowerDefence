@@ -9,6 +9,7 @@ function DealDamageOnTargetReachedSystem:init()
     self.target_reacheds = self.world:get_table(Components.TargetReached)
     self.damages = self.world:get_table(Components.Damage)
     self.healthes = self.world:get_table(Components.Health)
+    self.deals = self.world:get_table(Components.DealDamage)
 
     self.filter = self.world:create_filter(Components.DealDamageOnTargetReached, Components.TargetReached, Components.Damage)
 end
@@ -16,11 +17,8 @@ end
 function DealDamageOnTargetReachedSystem:execute()
     for _, entity in self.filter:entities() do
         local reached_target = self.target_reacheds:get(entity)
-        if self.healthes:has(reached_target.target) then
-            local damage = self.damages:get(entity)
-            local target_health = self.healthes:get(reached_target.target)
-            target_health.value = target_health.value - damage.value
-        end
+        local deal = self.deals:get_or_add(entity)
+        table.insert(deal.target_entities, reached_target.target)
     end
 end
 

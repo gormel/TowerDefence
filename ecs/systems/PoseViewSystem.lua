@@ -1,6 +1,7 @@
 local ecstasy = require "external.ecstasy"
 local Components = require("ecs.components")
 
+---@class PoseViewSystem : ecstasy.System
 local PoseViewSystem = ecstasy.System("PoseViewSystem")
 
 function PoseViewSystem:init()
@@ -14,7 +15,7 @@ function PoseViewSystem:execute(Time)
 		local view = self.view_components:get(entity)
 		local pos = self.position_components:get(entity)
 
-		go.set_position(vmath.vector3(pos.x, pos.y, 0), view.id)
+		go.set_position(vmath.vector3(pos.x, pos.y, pos.z), view.id)
 	end
 end
 

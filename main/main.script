@@ -11,7 +11,7 @@ local PoseViewSystem                   = require("ecs.systems.PoseViewSystem")
 local RoundToCellSystem                = require("ecs.systems.RoundToCellSystem")
 local FollowPointerSystem              = require("ecs.systems.FollowPointerSystem")
 local RenderMoneySystem                = require("ecs.systems.RenderMoneySystem")
-local RenderSelectedTowerSystem        = require("ecs.systems.RenderSelectedTowerSystem")
+local RenderSelectedTowerTypeSystem    = require("ecs.systems.RenderSelectedTowerTypeSystem")
 local AttachToParentSystem             = require("ecs.systems.AttachToParentSystem")
 local ClearTargetReachedSystem         = require("ecs.systems.ClearTargetReachedSystem")
 local ApplyVelocitySystem              = require("ecs.systems.ApplyVelocitySystem")
@@ -49,6 +49,10 @@ local RenderHealthSystem               = require("ecs.systems.RenderHealthSystem
 local AttachHealthBarSystem            = require("ecs.systems.AttachHealthBarSystem")
 local AttachFrozenStatusSystem         = require("ecs.systems.AttachFrozenStatusSystem")
 local AttachPoisonedStatusSystem       = require("ecs.systems.AttachPoisonedStatusSystem")
+local SelectTowerSystem                = require("ecs.systems.SelectTowerSystem")
+local RenderSelectedTowerSystem        = require("ecs.systems.RenderSelectedTowerSystem")
+local DealDamageSystem                 = require("ecs.systems.DealDamageSystem")
+local AttachSelectionViewSystem        = require("ecs.systems.AttachSelectionViewSystem")
 
 local DefWorld                         = ecstasy.World()
 
@@ -162,6 +166,7 @@ function init(self)
 
 	self.systems:register(SelectTowerTypeSystem)
 	self.systems:register(RequestTowerSystem)
+	self.systems:register(SelectTowerSystem)
 
 	--setup parameters
 	self.systems:register(SetupSpeedSystem)
@@ -181,6 +186,7 @@ function init(self)
 	self.systems:register(AttachHealthBarSystem)
 	self.systems:register(AttachFrozenStatusSystem)
 	self.systems:register(AttachPoisonedStatusSystem)
+	self.systems:register(AttachSelectionViewSystem)
 
 	self.systems:register(LaunchMonsterSpawnerSystem)
 	self.systems:register(ApplyStatusSystem)
@@ -195,8 +201,9 @@ function init(self)
 	self.systems:register(NextWaveSystem)
 
 	self.systems:register(CreateMonsterSystem)
-
 	self.systems:register(CreateTowerSystem)
+
+	self.systems:register(DealDamageSystem)
 
 
 	--render scene
@@ -206,6 +213,7 @@ function init(self)
 
 	--render gui
 	self.systems:register(RenderMoneySystem)
+	self.systems:register(RenderSelectedTowerTypeSystem)
 	self.systems:register(RenderSelectedTowerSystem)
 
 	--destroys

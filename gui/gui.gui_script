@@ -1,6 +1,7 @@
 local Constants = require("ecs.constants")
 local mesages   = require("main.mesages")
 local setup     = require("ecs.setup")
+local Components= require("ecs.components")
 
 local scheme = {
 	TOWER_FRAGMENTS = {
@@ -13,9 +14,17 @@ local scheme = {
 	BUTTON_RESTART = "btn_restart",
 	BUTTON_NEXT_WAVE = "btn_next_wave",
 	TEXT_WAVE_INDEX = "wave_index_value_text",
+
+	NODE_SELECTED_TOWER_INFO = "tower_info",
+	TEXT_TOWER_NAME = "text_title",
+	TEXT_STATS = "text_stats",
+	IMAGE_SELECTED_TOWER = "img_tower",
 }
 
 function init(self)
+	self.buttons = {}
+	self.scrolls = {}
+
 	msg.post(".", "acquire_input_focus")
 	msg.post("#", mesages.START)
 end
@@ -28,6 +37,17 @@ end
 
 local function add_button(self, node, callback)
 	table.insert(self.buttons, { node = node, callback = callback })
+end
+
+local function add_scroll(self, node)
+	local size = gui.get_size(node)
+	table.insert(self.scrolls, { node = node, init_size = size })
+	return #self.scrolls
+end
+
+local function set_scroll(self, scroll_id, value)
+	local scroll = self.scrolls[scroll_id]
+	gui.set_size(scroll.node, vmath.vector3(scroll.init_size.x * value, scroll.init_size.y, 0))
 end
 
 local function on_next_wave_click(self)
@@ -47,9 +67,26 @@ local function get_tower_node(tower_setup, fragment)
 	return gui.get_node(tower_setup.button_template..fragment)
 end
 
-local function on_start(self)
-	self.buttons = {}
+local function update_selected_tower(self, emplty, tower_type, dps, statuses, kills)
+	if emplty then
+		gui.set_enabled(gui.get_node(scheme.NODE_SELECTED_TOWER_INFO), false)
+		return
+	end
 
+	local tower_cfg = setup.Towers[tower_type]
+	
+	gui.set_enabled(gui.get_node(scheme.NODE_SELECTED_TOWER_INFO), true)
+
+	gui.set_text(gui.get_node(scheme.TEXT_TOWER_NAME), tower_type)
+
+	local stats_text = string.format([[dps: %d
+apply: %s
+kills: %d]], dps, table.concat(statuses, ", "), kills)
+	gui.set_text(gui.get_node(scheme.TEXT_STATS), stats_text)
+	gui.play_flipbook(gui.get_node(scheme.IMAGE_SELECTED_TOWER), tower_cfg.gui_icon)
+end
+
+local function on_start(self)
 	add_button(self, gui.get_node(scheme.BUTTON_RESTART), on_restart_click)
 	add_button(self, gui.get_node(scheme.BUTTON_NEXT_WAVE), on_next_wave_click)
 	for tower_setup_type, tower_setup in pairs(setup.Towers) do
@@ -71,6 +108,8 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == mesages.GAME_OVER then
 		gui.set_enabled(gui.get_node(scheme.IMAGE_GAME_OVER), true)
 	elseif message_id == mesages.UPDATE_SELECTED_TOWER then
+		update_selected_tower(self, message.empty, message.tower_type, message.dps, message.statuses, message.kills)
+	elseif message_id == mesages.UPDATE_SELECTED_TOWER_TYPE then
 		local tower_type = message.tower_type
 		for tower_setup_type, tower_setup in pairs(setup.Towers) do
 			local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.SELECTED)
