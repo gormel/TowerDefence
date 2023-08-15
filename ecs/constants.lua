@@ -12,8 +12,9 @@ return {
 	URL_MAIN = "/go#main",
 	URL_GUI = "/gui#gui",
 
-	FACTORY_URL_HP_BAR = "/go#hp_bar_factory",
-	FACTORY_URL_SELECTION = "/go#selection_factory",
+	FACTORY_URL_HP_BAR = "/ui#hp_bar_factory",
+	FACTORY_URL_SELECTION = "/ui#selection_factory",
+	FACTORY_URL_UPGRADE = "/ui#upgrade_ui_factory",
 
 	SHOOT_DELAY = 0.5
 }

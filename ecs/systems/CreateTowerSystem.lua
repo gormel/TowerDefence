@@ -23,6 +23,7 @@ function CreateTowerSystem:init()
 	self.damage_components = self.world:get_table(Components.Damage)
 	self.filter_components = self.world:get_table(Components.TargetFilters)
 	self.kill_counters = self.world:get_table(Components.KillCounter)
+	self.upgrades = self.world:get_table(Components.AvaliableUpgrades)
 	
 	self.requests_filter = self.world:create_filter(Components.TowerCreateRequest, Components.Position)
 	self.towers_filter = self.world:create_filter(Components.BlocksTower, Components.Position)
@@ -72,6 +73,11 @@ function CreateTowerSystem:execute()
 						for _, filter in ipairs(tower_setup.target_filters) do
 							table.insert(filters.filters, filter)
 						end
+					end
+
+					local upgrades = self.upgrades:add(tower_entity)
+					for upgrade_type, _ in pairs(setup.TowerUpgrades[type] or {}) do
+						table.insert(upgrades.upgrades, upgrade_type)
 					end
 
 					self.target_monster_in_view_radius_components:add(tower_entity)

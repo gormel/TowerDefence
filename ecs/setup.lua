@@ -13,7 +13,7 @@ return {
 		monster_reward_progression = 1.4,
         monster_damage_to_castle = 1,
         speed = 25,
-        monster_factory_url = "/go#monster_factory",
+        monster_factory_url = "/world_objects#monster_factory",
     },
 
     ---@class setup.CastleSetup
@@ -25,11 +25,11 @@ return {
     Towers = {
         ---@class setup.TowerSetup
         [Constants.TOWER_TYPE_COMMON] = {
-            factory_url = "/go#common_tower_factory",
+            factory_url = "/towers#common_tower_factory",
             cost = 100,
             radius = Constants.CELL_SIZE * 2,
             damage = 50,
-            bullet_factory_url = "/go#bullet_factory",
+            bullet_factory_url = "/world_objects#bullet_factory",
             bullet_speed = 120,
             apply_status = {},
             button_template = "tmpl_common_tower",
@@ -37,11 +37,11 @@ return {
             gui_icon = "common_tower",
         },
         [Constants.TOWER_TYPE_FREEZE] = {
-            factory_url = "/go#freeze_tower_factory",
+            factory_url = "/towers#freeze_tower_factory",
             cost = 150,
             radius = Constants.CELL_SIZE * 2,
             damage = 25,
-            bullet_factory_url = "/go#bullet_factory",
+            bullet_factory_url = "/world_objects#bullet_factory",
             apply_status = { "Frozen" },
             bullet_speed = 120,
             button_template = "tmpl_freeze_tower",
@@ -49,11 +49,11 @@ return {
             gui_icon = "freeze_tower",
         },
         [Constants.TOWER_TYPE_POISON] = {
-            factory_url = "/go#poison_tower_factory",
+            factory_url = "/towers#poison_tower_factory",
             cost = 150,
             radius = Constants.CELL_SIZE * 2,
             damage = 25,
-            bullet_factory_url = "/go#bullet_factory",
+            bullet_factory_url = "/world_objects#bullet_factory",
             apply_status = { "Poisoned" },
             bullet_speed = 120,
             button_template = "tmpl_poison_tower",
@@ -75,13 +75,23 @@ return {
         },
     },
 
+    ---@type table<string, table<string, setup.TowerUpgrade[]>>
+    TowerUpgrades = {
+        [Constants.TOWER_TYPE_COMMON] = {
+            ---@class setup.TowerUpgrade
+            [Constants.TOWER_TYPE_FREEZE] = {
+                cost = 50,
+            }
+        }
+    },
+
     Statuses = {
         ---@class setup.FrozenStatus
         ["Frozen"] = {
             type = Constants.STATUS_TYPE_FROZEN,
             force = 0.5,
             duration = 5,
-            factory_url = "/go#freeze_status_factory",
+            factory_url = "/effects#freeze_status_factory",
         },
         ---@class setup.PoisonedStatus
         ["Poisoned"] = {
@@ -89,7 +99,7 @@ return {
             tick_time = 0.5,
             tick_count = 10,
             tick_damage = 5,
-            factory_url = "/go#poison_status_factory",
+            factory_url = "/effects#poison_status_factory",
         },
     },
 }

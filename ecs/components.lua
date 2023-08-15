@@ -191,6 +191,16 @@ return {
 	---@class HasSelectionView : ecstasy.Component
 	---@field view_entity number
 	HasSelectionView = { reset = function(self) self.view_entity = 0 end },
+	---@class AvaliableUpgrades : ecstasy.Component
+	---@field upgrades string[]
+	AvaliableUpgrades = { reset = function(self) self.upgrades = {} end },
+	---@class UpgradeView : ecstasy.Component
+	---@field upgrade string
+	---@field tower_entity number
+	UpgradeView = { reset = function(self) self.upgrade = nil self.tower_entity = 0 end },
+	---@class HasUpgradeView : ecstasy.Component
+	---@field view_entities number[]
+	HasUpgradeView = { reset = function(self) self.view_entities = {} end },
 	---@class KillCounter : ecstasy.Component
 	---@field value number
 	KillCounter = { reset = function(self) self.value = 0 end },
@@ -205,4 +215,11 @@ return {
 	DealDamage = { reset = function(self) self.target_entities = {} end },
 	---@class PoisonDamageDealer : ecstasy.Component
 	PoisonDamageDealer = { reset = function(self)  end },
+	---@class ClickDetector : ecstasy.Component
+	ClickDetector = { reset = function(self)  end },
+	---@class Clicked : ecstasy.Component
+	Clicked = { reset = function(self)  end },
+	---@class UpgradeTower : ecstasy.Component
+	---@field upgrade string
+	UpgradeTower = { reset = function(self) self.upgrade = nil end },
 }

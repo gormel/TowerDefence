@@ -53,6 +53,8 @@ local SelectTowerSystem                = require("ecs.systems.SelectTowerSystem"
 local RenderSelectedTowerSystem        = require("ecs.systems.RenderSelectedTowerSystem")
 local DealDamageSystem                 = require("ecs.systems.DealDamageSystem")
 local AttachSelectionViewSystem        = require("ecs.systems.AttachSelectionViewSystem")
+local AttachUpgradeViewSystem          = require("ecs.systems.AttachUpgradeViewSystem")
+local DetectClickSystem                = require("ecs.systems.DetectClickSystem")
 
 local DefWorld                         = ecstasy.World()
 
@@ -102,7 +104,7 @@ local function init_road(self, ...)
 
 				local palet_view_entity = self.world:new_entity()
 				local palet_vew_resource = self.world:add_component(Components.Resource, palet_view_entity)
-				palet_vew_resource.factory_url = "/go#palete_factory"
+				palet_vew_resource.factory_url = "/world_objects#palete_factory"
 				local palet_view_parent = self.world:add_component(Components.Parent, palet_view_entity)
 				palet_view_parent.entity = palet_entity
 				self.world:add_component(Components.AttachToParent, palet_view_entity)
@@ -129,7 +131,7 @@ local function init_game(self)
 	--Cursor
 	local cursor_entity = self.world:new_entity()
 	local cursor_resource = self.world:add_component(Components.Resource, cursor_entity)
-	cursor_resource.factory_url = "/go#cursor_factory"
+	cursor_resource.factory_url = "/ui#cursor_factory"
 	self.world:add_component(Components.Position, cursor_entity)
 	self.world:add_component(Components.FollowPointer, cursor_entity)
 	self.world:add_component(Components.RoundToCell, cursor_entity)
@@ -175,6 +177,7 @@ function init(self)
 	self.systems:register(FrozenSystem)
 	self.systems:register(PoisonSystem)
 
+	self.systems:register(DetectClickSystem)
 	self.systems:register(FollowPointerSystem)
 	self.systems:register(RoundToCellSystem)
 	self.systems:register(AttachToParentSystem)
@@ -187,6 +190,7 @@ function init(self)
 	self.systems:register(AttachFrozenStatusSystem)
 	self.systems:register(AttachPoisonedStatusSystem)
 	self.systems:register(AttachSelectionViewSystem)
+	self.systems:register(AttachUpgradeViewSystem)
 
 	self.systems:register(LaunchMonsterSpawnerSystem)
 	self.systems:register(ApplyStatusSystem)

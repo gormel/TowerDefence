@@ -1,0 +1,47 @@
+go.property("bounding_sprite", msg.url("#sprite"))
+go.property("sprite_offset", vmath.vector3())
+go.property("clicked", 0)
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+	self.size = go.get(self.bounding_sprite, "size")
+end
+
+function final(self)
+end
+
+function update(self, dt)
+end
+
+function fixed_update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("touch") and action.pressed then
+		local go_scale = go.get_scale_vector(msg.url("."))
+		local sprite_scale = go.get(self.bounding_sprite, "scale")
+		local pos = go.get_position(msg.url("."))
+		pos.x = pos.x + self.sprite_offset.x * go_scale.x
+		pos.y = pos.y + self.sprite_offset.y * go_scale.y
+		local scaled_size = vmath.vector3(self.size.x * go_scale.x * sprite_scale.x, self.size.y * go_scale.y * sprite_scale.y, 0)
+
+		if
+			action.x >= pos.x - scaled_size.x / 2 and
+			action.x <= pos.x + scaled_size.x / 2 and
+			action.y >= pos.y - scaled_size.y / 2 and
+			action.y <= pos.y + scaled_size.y / 2
+		then
+			if self.click_entity ~= 0 then
+				self.clicked = 1
+				return true
+			end
+		end
+	end
+end
+
+function on_reload(self)
+end
