@@ -13,7 +13,9 @@ function DetectClickSystem:init()
 end
 
 function DetectClickSystem:execute()
-    self.clickeds:clear()
+    for _, entity in self.clickeds:reverse_entities() do
+        self.clickeds:del(entity)
+    end
 
     for _, entity in self.filter:entities() do
         local view = self.views:get(entity)
@@ -21,6 +23,7 @@ function DetectClickSystem:execute()
         if go.get(msg.url(nil, view.id, "detect_click"), "clicked") == 1 then
             self.clickeds:add(entity)
             go.set(msg.url(nil, view.id, "detect_click"), "clicked", 0)
+            print("detected", entity)
         end
     end
 end

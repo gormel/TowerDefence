@@ -75,7 +75,7 @@ return {
         },
     },
 
-    ---@type table<string, table<string, setup.TowerUpgrade[]>>
+    ---@type table<string, table<string, setup.TowerUpgrade>>
     TowerUpgrades = {
         [Constants.TOWER_TYPE_COMMON] = {
             ---@class setup.TowerUpgrade

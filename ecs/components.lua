@@ -43,6 +43,9 @@ return {
 	---@class TowerCreateRequest : ecstasy.Component
 	---@field tower_type string
 	TowerCreateRequest = { reset = function(self) self.tower_type = "" end },
+	---@class TowerBuyRequest : ecstasy.Component
+	---@field tower_type string
+	TowerBuyRequest = { reset = function(self) self.tower_type = "" end },
 	---@class SelectedTowerType : ecstasy.Component
 	---@field tower_type string
 	SelectedTowerType = { reset = function(self) self.tower_type = ""	end },
