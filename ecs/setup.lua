@@ -81,6 +81,7 @@ return {
             ---@class setup.TowerUpgrade
             [Constants.TOWER_TYPE_FREEZE] = {
                 cost = 50,
+                icon_factory_url = "/ui#upgrade_ui_factory",
             }
         }
     },

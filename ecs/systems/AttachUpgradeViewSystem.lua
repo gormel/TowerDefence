@@ -1,5 +1,6 @@
 local ecstasy = require "external.ecstasy"
 local constants = require "ecs.constants"
+local setup     = require "ecs.setup"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -15,8 +16,9 @@ function AttachUpgradeViewSystem:init()
 	self.destroyeds = self.world:get_table(Components.Destroyed)
 	self.upgrades = self.world:get_table(Components.AvaliableUpgrades)
 	self.detectors = self.world:get_table(Components.ClickDetector)
+	self.towers = self.world:get_table(Components.Tower)
     
-    self.add_filter = self.world:create_filter(Components.AvaliableUpgrades, Components.Selected, exc(Components.HasUpgradeView))
+    self.add_filter = self.world:create_filter(Components.AvaliableUpgrades, Components.Selected, exc(Components.HasUpgradeView), Components.Tower)
     self.del_filter = self.world:create_filter(Components.HasUpgradeView, exc(Components.Selected))
 end
 
@@ -24,12 +26,15 @@ function AttachUpgradeViewSystem:execute()
     for _, entity in self.add_filter:reverse_entities() do
         local upgrades = self.upgrades:get(entity)
         local link = self.links:get_or_add(entity)
+        local tower = self.towers:get_or_add(entity)
 
         local idx = 0
         for _, upgrade in ipairs(upgrades.upgrades) do
+            local upgrade_cfg = setup.TowerUpgrades[tower.tower_type][upgrade]
+
             local view_entity = self.world:new_entity()
             local res = self.resources:add(view_entity)
-            res.factory_url = constants.FACTORY_URL_UPGRADE
+            res.factory_url = upgrade_cfg.icon_factory_url
             local parent = self.parents:add(view_entity)
             parent.entity = entity
             local attach = self.attach_to_parents:add(view_entity)

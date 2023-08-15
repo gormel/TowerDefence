@@ -22,8 +22,6 @@ function DetectClickSystem:execute()
 
         if go.get(msg.url(nil, view.id, "detect_click"), "clicked") == 1 then
             self.clickeds:add(entity)
-            go.set(msg.url(nil, view.id, "detect_click"), "clicked", 0)
-            print("detected", entity)
         end
     end
 end

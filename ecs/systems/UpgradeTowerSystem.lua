@@ -19,7 +19,6 @@ end
 
 function UpgradeTowerSystem:execute()
     for _, entity in self.filter:reverse_entities() do
-        print("upgrade")
         local upgrade = self.upgrades:get(entity)
         local tower = self.towers:get(entity)
         local upgrade_cfg = setup.TowerUpgrades[tower.tower_type][upgrade.upgrade]

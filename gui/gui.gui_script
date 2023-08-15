@@ -90,9 +90,11 @@ local function on_start(self)
 	add_button(self, gui.get_node(scheme.BUTTON_RESTART), on_restart_click)
 	add_button(self, gui.get_node(scheme.BUTTON_NEXT_WAVE), on_next_wave_click)
 	for tower_setup_type, tower_setup in pairs(setup.Towers) do
-		local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.BUTTON)
-		local tower_type = tower_setup_type
-		add_button(self, node, function() on_select_click(self, tower_type) end)
+		if tower_setup.button_template ~= nil then
+			local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.BUTTON)
+			local tower_type = tower_setup_type
+			add_button(self, node, function() on_select_click(self, tower_type) end)
+		end
 	end
 end
 
