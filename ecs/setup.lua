@@ -150,11 +150,11 @@ return {
             ---@class setup.TowerUpgrade
             [Constants.TOWER_TYPE_DAMAGE] = {
                 cost = 80,
-                icon_factory_url = "/ui#upgrade_ui_factory",
+                icon_factory_url = "/ui#upgrade_damage_ui_factory",
             },
             [Constants.TOWER_TYPE_RANGE] = {
                 cost = 80,
-                icon_factory_url = "/ui#upgrade_ui_factory",
+                icon_factory_url = "/ui#upgrade_range_ui_factory",
             },
         },
         [Constants.TOWER_TYPE_DAMAGE] = {
@@ -176,11 +176,11 @@ return {
             ---@class setup.TowerUpgrade
             [Constants.TOWER_TYPE_FREEZE] = {
                 cost = 80,
-                icon_factory_url = "/ui#upgrade_ui_factory",
+                icon_factory_url = "/ui#upgrade_freeze_ui_factory",
             },
             [Constants.TOWER_TYPE_POISON] = {
                 cost = 80,
-                icon_factory_url = "/ui#upgrade_ui_factory",
+                icon_factory_url = "/ui#upgrade_poison_ui_factory",
             },
         },
         [Constants.TOWER_TYPE_FREEZE] = {

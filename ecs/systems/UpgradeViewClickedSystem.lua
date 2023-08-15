@@ -15,6 +15,7 @@ end
 function UpgradeViewClickedSystem:execute()
     for _, entity in self.filter:entities() do
         local view = self.views:get(entity)
+        print("upclicked", entity, view.tower_entity)
         local upgrade = self.upgrades:add(view.tower_entity)
         upgrade.upgrade = view.upgrade
     end
