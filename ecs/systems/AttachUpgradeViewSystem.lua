@@ -32,6 +32,11 @@ function AttachUpgradeViewSystem:execute()
         for _, upgrade in ipairs(upgrades.upgrades) do
             local upgrade_cfg = setup.TowerUpgrades[tower.tower_type][upgrade]
 
+            local angle = math.pi / 2
+            if #upgrades.upgrades > 1 then
+                angle = idx / (#upgrades.upgrades - 1) * math.pi
+            end
+
             local view_entity = self.world:new_entity()
             local res = self.resources:add(view_entity)
             res.factory_url = upgrade_cfg.icon_factory_url
@@ -40,8 +45,8 @@ function AttachUpgradeViewSystem:execute()
             local attach = self.attach_to_parents:add(view_entity)
             attach.sync_angle = false
             attach.dz = 0.1
-            attach.dx = math.cos(idx / #upgrades.upgrades * math.pi) * (constants.CELL_SIZE) / 2
-            attach.dy = math.sin(idx / #upgrades.upgrades * math.pi) * (constants.CELL_SIZE) / 2
+            attach.dx =  math.cos(angle) * (constants.CELL_SIZE) / 2
+            attach.dy = -math.sin(angle) * (constants.CELL_SIZE) / 2
             local view = self.views:add(view_entity)
             view.upgrade = upgrade
             view.tower_entity = entity

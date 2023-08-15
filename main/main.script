@@ -288,12 +288,6 @@ function on_input(self, action_id, action)
 			self.world:add_component(Components.MouseDownInput, touch_entity)
 		end
 		self.world:add_component(Components.Destroyed, touch_entity)
-	elseif action_id == hash("1") and action.pressed then
-		select_tower_build(self, const.TOWER_TYPE_COMMON)
-	elseif action_id == hash("2") and action.pressed then
-		select_tower_build(self, const.TOWER_TYPE_FREEZE)
-	elseif action_id == hash("3") and action.pressed then
-		select_tower_build(self, const.TOWER_TYPE_POISON)
 	end
 end
 

@@ -114,8 +114,10 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == mesages.UPDATE_SELECTED_TOWER_TYPE then
 		local tower_type = message.tower_type
 		for tower_setup_type, tower_setup in pairs(setup.Towers) do
-			local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.SELECTED)
-			gui.set_visible(node, tower_setup_type == tower_type)
+			if tower_setup.button_template ~= nil then
+				local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.SELECTED)
+				gui.set_visible(node, tower_setup_type == tower_type)
+			end
 		end
 	end
 end

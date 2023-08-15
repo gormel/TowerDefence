@@ -36,29 +36,98 @@ return {
             target_filters = {},
             gui_icon = "common_tower",
         },
-        [Constants.TOWER_TYPE_FREEZE] = {
-            factory_url = "/towers#freeze_tower_factory",
+        [Constants.TOWER_TYPE_DAMAGE] = {
+            factory_url = "/towers#damage_tower_factory",
+            radius = Constants.CELL_SIZE * 2,
+            damage = 60,
+            bullet_factory_url = "/world_objects#bullet_factory",
+            apply_status = { },
+            bullet_speed = 120,
+            target_filters = { },
+            gui_icon = "damage_tower",
+        },
+        [Constants.TOWER_TYPE_DAMAGE_T2] = {
+            factory_url = "/towers#damage_tower_factory_t2",
+            radius = Constants.CELL_SIZE * 2,
+            damage = 85,
+            bullet_factory_url = "/world_objects#bullet_factory",
+            apply_status = { },
+            bullet_speed = 120,
+            target_filters = { },
+            gui_icon = "damage_tower_t2",
+        },
+        [Constants.TOWER_TYPE_RANGE] = {
+            factory_url = "/towers#range_tower_factory",
+            radius = Constants.CELL_SIZE * 3,
+            damage = 50,
+            bullet_factory_url = "/world_objects#bullet_factory",
+            apply_status = { },
+            bullet_speed = 120,
+            target_filters = { },
+            gui_icon = "range_tower",
+        },
+        [Constants.TOWER_TYPE_RANGE_T2] = {
+            factory_url = "/towers#range_tower_factory_t2",
+            radius = Constants.CELL_SIZE * 6,
+            damage = 50,
+            bullet_factory_url = "/world_objects#bullet_factory",
+            apply_status = { },
+            bullet_speed = 120,
+            target_filters = { },
+            gui_icon = "range_tower_t2",
+        },
+        ----------------------------------------------------------
+        [Constants.TOWER_TYPE_MAGIC] = {
+            factory_url = "/towers#magic_tower_factory",
             cost = 150,
             radius = Constants.CELL_SIZE * 2,
             damage = 25,
             bullet_factory_url = "/world_objects#bullet_factory",
-            apply_status = { "Frozen" },
+            apply_status = { },
             bullet_speed = 120,
-            button_template = "tmpl_freeze_tower",
-            target_filters = { "NonFrozenFilter" },
-            gui_icon = "freeze_tower",
+            button_template = "tmpl_magic_tower",
+            target_filters = { },
+            gui_icon = "magic_tower",
         },
         [Constants.TOWER_TYPE_POISON] = {
             factory_url = "/towers#poison_tower_factory",
-            cost = 150,
             radius = Constants.CELL_SIZE * 2,
             damage = 25,
             bullet_factory_url = "/world_objects#bullet_factory",
             apply_status = { "Poisoned" },
             bullet_speed = 120,
-            button_template = "tmpl_poison_tower",
             target_filters = { "NonPoisonedFilter" },
             gui_icon = "poison_tower",
+        },
+        [Constants.TOWER_TYPE_FREEZE] = {
+            factory_url = "/towers#freeze_tower_factory",
+            radius = Constants.CELL_SIZE * 2,
+            damage = 25,
+            bullet_factory_url = "/world_objects#bullet_factory",
+            apply_status = { "Frozen" },
+            bullet_speed = 120,
+            target_filters = { "NonFrozenFilter" },
+            gui_icon = "freeze_tower",
+        },
+        [Constants.TOWER_TYPE_POISON_T2] = {
+            factory_url = "/towers#poison_tower_factory_t2",
+            radius = Constants.CELL_SIZE * 2,
+            damage = 25,
+            bullet_factory_url = "/world_objects#bullet_factory",
+            apply_status = { "PoisonedT2" },
+            bullet_speed = 120,
+            target_filters = { "NonPoisonedFilter" },
+            gui_icon = "poison_tower_t2",
+        },
+        [Constants.TOWER_TYPE_FREEZE_T2] = {
+            factory_url = "/towers#freeze_tower_factory_t2",
+            radius = Constants.CELL_SIZE * 2,
+            damage = 25,
+            bullet_factory_url = "/world_objects#bullet_factory",
+            apply_status = { "FrozenT2" },
+            bullet_speed = 120,
+            target_filters = { "NonFrozenFilter" },
+            gui_icon = "freeze_tower_t2",
         },
     },
 
@@ -79,11 +148,55 @@ return {
     TowerUpgrades = {
         [Constants.TOWER_TYPE_COMMON] = {
             ---@class setup.TowerUpgrade
-            [Constants.TOWER_TYPE_FREEZE] = {
-                cost = 50,
+            [Constants.TOWER_TYPE_DAMAGE] = {
+                cost = 80,
                 icon_factory_url = "/ui#upgrade_ui_factory",
-            }
-        }
+            },
+            [Constants.TOWER_TYPE_RANGE] = {
+                cost = 80,
+                icon_factory_url = "/ui#upgrade_ui_factory",
+            },
+        },
+        [Constants.TOWER_TYPE_DAMAGE] = {
+            ---@class setup.TowerUpgrade
+            [Constants.TOWER_TYPE_DAMAGE_T2] = {
+                cost = 150,
+                icon_factory_url = "/ui#upgrade_ui_factory",
+            },
+        },
+        [Constants.TOWER_TYPE_RANGE] = {
+            ---@class setup.TowerUpgrade
+            [Constants.TOWER_TYPE_RANGE_T2] = {
+                cost = 150,
+                icon_factory_url = "/ui#upgrade_ui_factory",
+            },
+        },
+
+        [Constants.TOWER_TYPE_MAGIC] = {
+            ---@class setup.TowerUpgrade
+            [Constants.TOWER_TYPE_FREEZE] = {
+                cost = 80,
+                icon_factory_url = "/ui#upgrade_ui_factory",
+            },
+            [Constants.TOWER_TYPE_POISON] = {
+                cost = 80,
+                icon_factory_url = "/ui#upgrade_ui_factory",
+            },
+        },
+        [Constants.TOWER_TYPE_FREEZE] = {
+            ---@class setup.TowerUpgrade
+            [Constants.TOWER_TYPE_FREEZE_T2] = {
+                cost = 150,
+                icon_factory_url = "/ui#upgrade_ui_factory",
+            },
+        },
+        [Constants.TOWER_TYPE_POISON] = {
+            ---@class setup.TowerUpgrade
+            [Constants.TOWER_TYPE_POISON_T2] = {
+                cost = 150,
+                icon_factory_url = "/ui#upgrade_ui_factory",
+            },
+        },
     },
 
     Statuses = {
@@ -100,6 +213,21 @@ return {
             tick_time = 0.5,
             tick_count = 10,
             tick_damage = 5,
+            factory_url = "/effects#poison_status_factory",
+        },
+        ---@class setup.FrozenStatus
+        ["FrozenT2"] = {
+            type = Constants.STATUS_TYPE_FROZEN,
+            force = 0.2,
+            duration = 8,
+            factory_url = "/effects#freeze_status_factory",
+        },
+        ---@class setup.PoisonedStatus
+        ["PoisonedT2"] = {
+            type = Constants.STATUS_TYPE_POISONED,
+            tick_time = 0.5,
+            tick_count = 20,
+            tick_damage = 8,
             factory_url = "/effects#poison_status_factory",
         },
     },
