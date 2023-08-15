@@ -269,6 +269,7 @@ function on_message(self, message_id, message, sender)
 		next_wave(self)
 	elseif message_id == mesages.RESTART then
 		init_game(self)
+		print("restart")
 	end
 end
 

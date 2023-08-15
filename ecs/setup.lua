@@ -18,7 +18,7 @@ return {
 
     ---@class setup.CastleSetup
     CastleSetup = {
-        health = 1,
+        health = 10,
     },
 
     ---@type table<string, setup.TowerSetup>
