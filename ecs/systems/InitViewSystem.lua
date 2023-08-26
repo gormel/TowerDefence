@@ -2,6 +2,7 @@ local ecstasy = require "external.ecstasy"
 local exc, added, removed = ecstasy.exc, ecstasy.added, ecstasy.removed
 local Components = require("ecs.components")
 
+---@class InitViewSystem : ecstasy.Component
 local InitViewSystem = ecstasy.System("InitViewSystem")
 
 function InitViewSystem:init()

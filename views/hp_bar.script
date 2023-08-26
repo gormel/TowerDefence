@@ -1,26 +1,28 @@
-go.property("hp_value", 0)
+local mesages = require "main.mesages"
 go.property("sprite", msg.url("#sprite"))
 go.property("animation", hash("hp_bar"))
 go.property("visible", true)
 
-function update(self, dt)
-	if self.prev_hp_value == nil or self.prev_hp_value ~= self.hp_value then
-		if self.hp_value == 1 then
-			if self.visible then
-				msg.post(self.sprite, "disable")
-				self.visible = false
+function on_message(self, message_id, message)
+	if message_id == mesages.SET_HEALTH then
+		if self.prev_hp_value == nil or self.prev_hp_value ~= message.hp_value then
+			if message.hp_value == 1 then
+				if self.visible then
+					msg.post(self.sprite, "disable")
+					self.visible = false
+				end
+			else
+				if not self.visible then
+					msg.post(self.sprite, "enable")
+					self.visible = true
+				end
+	
+				sprite.play_flipbook(self.sprite, self.animation, nil, {
+					offset = message.hp_value,
+					playback_rate = 0,
+				})
 			end
-		else
-			if not self.visible then
-				msg.post(self.sprite, "enable")
-				self.visible = true
-			end
-
-			sprite.play_flipbook(self.sprite, self.animation, nil, {
-				offset = self.hp_value,
-				playback_rate = 0,
-			})
+			self.prev_hp_value = message.hp_value
 		end
-		self.prev_hp_value = self.hp_value
 	end
 end

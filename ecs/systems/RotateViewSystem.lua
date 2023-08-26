@@ -1,4 +1,5 @@
 local ecstasy = require "external.ecstasy"
+local mesages = require "main.mesages"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -16,7 +17,7 @@ function RotateViewSystem:execute()
 		local view = self.view_components:get(entity)
 		local rot = self.rotation_components:get(entity)
 
-        go.set_rotation(vmath.quat_rotation_z(rot.angle), view.id)
+		msg.post(msg.url(nil, view.id, "rotation"), mesages.SET_ROTATION, { angle = rot.angle })
 	end
 end
 

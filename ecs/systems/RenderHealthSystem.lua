@@ -1,4 +1,5 @@
 local ecstasy = require "external.ecstasy"
+local mesages = require "main.mesages"
 local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed
 local Components = require("ecs.components")
 
@@ -22,7 +23,7 @@ function RenderHealthSystem:execute()
         if hp ~= nil and hp_view.health_value ~= hp.value then
             local view = self.views:get(entity)
             hp_view.health_value = hp.value
-            go.set(msg.url(nil, view.id, "hp_bar"), "hp_value", hp.value / hp.max_value)
+            msg.post(msg.url(nil, view.id, "hp_bar"), mesages.SET_HEALTH, { hp_value = hp.value / hp.max_value })
         end
     end
 end

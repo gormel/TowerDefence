@@ -1,0 +1,28 @@
+local mesages = require "main.mesages"
+
+go.property("sprite", msg.url("#sprite"))
+go.property("animation", hash(""))
+go.property("method", hash("rotation"))
+
+function on_message(self, message_id, message)
+	if message_id == mesages.SET_ROTATION then
+		if self.prev_angle == nil or self.prev_angle ~= message.angle then
+			if self.method == hash("animation") then
+				local reminder = message.angle / (math.pi * 2)
+				if reminder > 0 then
+					reminder = math.floor(reminder)
+				else
+					reminder = math.ceil(reminder)
+				end
+				reminder = message.angle / math.pi / 2 - reminder
+				sprite.play_flipbook(self.sprite, self.animation, nil, {
+					offset = reminder,
+					playback_rate = 0,
+				})
+			elseif self.method == hash("rotation") then
+				go.set_rotation(vmath.quat_rotation_z(message.angle))
+			end
+			self.prev_angle = message.angle
+		end
+	end
+end

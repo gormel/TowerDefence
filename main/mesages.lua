@@ -10,4 +10,6 @@ return {
     UPDATE_IDLE_STATE          = hash("update_idle_state"),
     NEXT_WAVE                  = hash("next_wave"),
     UPDATE_WAVE_INDEX          = hash("update_wave_index"),
+    SET_ROTATION               = hash("set_rotation"),
+    SET_HEALTH                 = hash("set_health"),
 }
