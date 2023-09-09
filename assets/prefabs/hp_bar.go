@@ -12,11 +12,6 @@ components {
     z: 0.0
     w: 1.0
   }
-  properties {
-    id: "hp_value"
-    value: "0.9"
-    type: PROPERTY_TYPE_NUMBER
-  }
 }
 embedded_components {
   id: "sprite"
