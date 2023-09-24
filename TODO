@@ -1,6 +1,5 @@
+fea: map editor mode
 ref: tower rotation using animation
 ref: clear scene on loose correctly
 ref: add bullet effects: fly, hit
 ref: add monster animated view
-fea: load maps from setup
-fea: map editor mode

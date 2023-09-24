@@ -231,4 +231,42 @@ return {
             factory_url = "/effects#poison_status_factory",
         },
     },
+
+    ---@type table<string, setup.Map>
+    Maps = {
+        ---@class setup.Map
+        ["Map_01"] = {
+            Routes = {
+                ---@type table<string, setup.Map.Point[]>
+                ["Route_01"] = {
+                    ---@class setup.Map.Point
+                    {
+                        x = 448 + 640,
+                        y = 88 + 360,
+                    },
+                    {
+                        x = 128 + 640,
+                        y = 88 + 360,
+                    },
+                    {
+                        x = 128 + 640,
+                        y = -104 + 360,
+                    },
+                    {
+                        x = -128 + 640,
+                        y = -104 + 360,
+                    },
+                    {
+                        x = -128 + 640,
+                        y = 88 + 360,
+                    },
+                },
+            },
+            ---@type setup.Map.Point
+            Castle = {
+                x = -448 + 640,
+                y = 88 + 360,
+            }
+        },
+    },
 }
