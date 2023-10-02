@@ -1,7 +1,7 @@
 script: ""
 textures {
   name: "gui"
-  texture: "/gui/gui.atlas"
+  texture: "/assets/images/atlases/gui.atlas"
 }
 textures {
   name: "towers"
@@ -69,6 +69,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: false
+  material: ""
 }
 nodes {
   position {
@@ -127,6 +128,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -185,6 +187,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -243,6 +246,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

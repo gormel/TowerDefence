@@ -23,5 +23,10 @@ return {
 	FACTORY_URL_SELECTION = "/ui#selection_factory",
 	FACTORY_URL_UPGRADE   = "/ui#upgrade_ui_factory",
 
+	FACTORY_URL_EDITOR_CASTLE   = "/world_objects#castle_factory",
+	FACTORY_URL_EDITOR_WAYPOINT   = "/world_objects#palete_factory",
+	FACTORY_URL_EDITOR_CONNECTION   = "/ui#connection_factory",
+	FACTORY_URL_EDITOR_CONNECTION_DIR   = "/ui#connection_dir_factory",
+
 	SHOOT_DELAY           = 0.5
 }

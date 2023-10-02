@@ -1,11 +1,11 @@
-script: "/gui/gui.gui_script"
+script: "/gui/main.gui_script"
 fonts {
   name: "system_font"
   font: "/builtins/fonts/system_font.font"
 }
 textures {
   name: "gui"
-  texture: "/gui/gui.atlas"
+  texture: "/assets/images/atlases/gui.atlas"
 }
 textures {
   name: "towers"

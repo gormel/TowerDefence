@@ -232,41 +232,18 @@ return {
         },
     },
 
+---@class setup.Map.Point
+---@field x number
+---@field y number
+
+---@class setup.Map
+---@field Routes table<string, setup.Map.Point[]>
+---@field Castle setup.Map.Point
+
     ---@type table<string, setup.Map>
     Maps = {
         ---@class setup.Map
-        ["Map_01"] = {
-            Routes = {
-                ---@type table<string, setup.Map.Point[]>
-                ["Route_01"] = {
-                    ---@class setup.Map.Point
-                    {
-                        x = 448 + 640,
-                        y = 88 + 360,
-                    },
-                    {
-                        x = 128 + 640,
-                        y = 88 + 360,
-                    },
-                    {
-                        x = 128 + 640,
-                        y = -104 + 360,
-                    },
-                    {
-                        x = -128 + 640,
-                        y = -104 + 360,
-                    },
-                    {
-                        x = -128 + 640,
-                        y = 88 + 360,
-                    },
-                },
-            },
-            ---@type setup.Map.Point
-            Castle = {
-                x = -448 + 640,
-                y = 88 + 360,
-            }
-        },
+        ["Map_01"] = require "ecs.maps.map_01",
+        ["Map_02"] = require "ecs.maps.map_02",
     },
 }

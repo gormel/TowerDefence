@@ -2,6 +2,7 @@ local ecstasy = require "external.ecstasy"
 
 ---@alias status "Frozen" | "Poisoned"
 
+---@class Components
 return {
 	---@class PointerInput : ecstasy.Component
 	---@field x number
@@ -34,6 +35,12 @@ return {
 	---@class View : ecstasy.Component
 	---@field id hash
 	View = { reset = function(self) self.id = 0 end },
+	---@class CollectionResource : ecstasy.Component
+	---@field factory_url string
+	CollectionResource = { reset = function(self) self.factory_url = "" end },
+	---@class CollectionView : ecstasy.Component
+	---@field id hash
+	CollectionView = { reset = function(self) self.id = 0 end },
 
 	---@class BlocksTower : ecstasy.Component
 	BlocksTower = { },
@@ -114,8 +121,8 @@ return {
 	---@field target number
 	TargetReached = { reset = function(self) self.target = 0 end },
 	---@class Waypoint : ecstasy.Component
-	---@field next number
-	Waypoint = { reset = function(self) self.next = 0 end },
+	---@field next? number
+	Waypoint = { reset = function(self) self.next = nil end },
 	---@class TargetMonsterInViewRadius : ecstasy.Component
 	TargetMonsterInViewRadius = {  },
 	---@class TargetFilters : ecstasy.Component

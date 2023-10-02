@@ -1,4 +1,5 @@
 fea: map editor mode
+fea: map selection
 ref: tower rotation using animation
 ref: clear scene on loose correctly
 ref: add bullet effects: fly, hit

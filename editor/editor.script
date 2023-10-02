@@ -1,0 +1,128 @@
+local ecstasy                    = require "external.ecstasy"
+local Components                 = require "ecs.components"
+local InitViewSystem             = require "ecs.systems.InitViewSystem"
+local DetectClickSystem          = require "ecs.systems.DetectClickSystem"
+local FollowPointerSystem        = require "ecs.systems.FollowPointerSystem"
+local RoundToCellSystem          = require "ecs.systems.RoundToCellSystem"
+local AttachToParentSystem       = require "ecs.systems.AttachToParentSystem"
+local BlockedSystem              = require "ecs.systems.BlockedSystem"
+local PoseViewSystem             = require "ecs.systems.PoseViewSystem"
+local RotateViewSystem           = require "ecs.systems.RotateViewSystem"
+local DestroyChildrenSystem      = require "ecs.systems.DestroyChildrenSystem"
+local ClearViewSystem            = require "ecs.systems.ClearViewSystem"
+local DestroySystem              = require "ecs.systems.DestroySystem"
+local mesages                    = require "editor.mesages"
+local SwitchModeSystem           = require "ecs.editor_systems.SwitchModeSystem"
+local EComponents                = require "ecs.editor_components"
+local SetCastleSystem            = require "ecs.editor_systems.SetCastleSystem"
+local SetWaypointSystem          = require "ecs.editor_systems.SetWaypointSystem"
+local ExportSystem               = require "ecs.editor_systems.ExportSystem"
+local ClearConnectionSystem      = require "ecs.editor_systems.ClearConnectionSystem"
+local AttachConnectionViewSystem = require "ecs.editor_systems.AttachConnectionViewSystem"
+local ConnectionSystem           = require "ecs.editor_systems.ConnectionSystem"
+local RenderConnectionSystem     = require "ecs.editor_systems.RenderConnectionSystem"
+local DelWaypointSystem          = require "ecs.editor_systems.DelWaypointSystem"
+local DelRouteSystem             = require "ecs.editor_systems.DelRouteSystem"
+
+
+local function init_editor(self)
+	--Cursor
+	local cursor_entity = self.world:new_entity()
+	local cursor_resource = self.world:add_component(Components.Resource, cursor_entity)
+	cursor_resource.factory_url = "/ui#cursor_factory"
+	self.world:add_component(Components.Position, cursor_entity)
+	self.world:add_component(Components.FollowPointer, cursor_entity)
+	self.world:add_component(Components.RoundToCell, cursor_entity)
+end
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
+
+	self.world = ecstasy.World:new()
+
+	self.systems = ecstasy.SystemsList({ world = self.world })
+	--init
+	self.systems:register(InitViewSystem)
+
+	self.systems:register(DetectClickSystem)
+	self.systems:register(FollowPointerSystem)
+	self.systems:register(RoundToCellSystem)
+	self.systems:register(AttachToParentSystem)
+	self.systems:register(BlockedSystem)
+
+	self.systems:register(SwitchModeSystem)
+	self.systems:register(SetCastleSystem)
+	self.systems:register(SetWaypointSystem)
+	self.systems:register(DelWaypointSystem)
+	self.systems:register(DelRouteSystem)
+	self.systems:register(ExportSystem)
+
+	self.systems:register(ConnectionSystem)
+	self.systems:register(AttachConnectionViewSystem)
+
+	--render scene
+	self.systems:register(RenderConnectionSystem)
+	self.systems:register(PoseViewSystem)
+	self.systems:register(RotateViewSystem)
+
+	--destroys
+	self.systems:register(ClearConnectionSystem)
+	self.systems:register(DestroyChildrenSystem)
+
+	--destroy triggers
+	self.systems:register(ClearViewSystem)
+
+	--process destroy
+	self.systems:register(DestroySystem)
+
+	self.systems:init()
+	init_editor(self)
+end
+
+function update(self, dt)
+	self.systems:execute(dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == mesages.SET_ROUTE_MODE then
+		local entity = self.world:new_entity()
+		self.world:add_component(EComponents.NewEditorMode, entity)
+		self.world:add_component(EComponents.RouteEditorMode, entity)
+	elseif message_id == mesages.EXPORT then
+		local entity = self.world:new_entity()
+		self.world:add_component(EComponents.ExportMap, entity)
+		self.world:add_component(Components.Destroyed, entity)
+	elseif message_id == mesages.SET_REMOVE_ROUTE_MODE then
+		local entity = self.world:new_entity()
+		self.world:add_component(EComponents.NewEditorMode, entity)
+		self.world:add_component(EComponents.RemoveRouteEditorMode, entity)
+	elseif message_id == mesages.SET_REMOVE_WAYPOINT_MODE then
+		local entity = self.world:new_entity()
+		self.world:add_component(EComponents.NewEditorMode, entity)
+		self.world:add_component(EComponents.RemoveWaypointEditorMode, entity)
+	elseif message_id == mesages.SET_CASTLE_MODE then
+		local entity = self.world:new_entity()
+		self.world:add_component(EComponents.NewEditorMode, entity)
+		self.world:add_component(EComponents.CastleEditorMode, entity)
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == nil then
+		local touch_entity = self.world:new_entity()
+		local pointer = self.world:add_component(Components.PointerInput, touch_entity)
+		pointer.x = action.x
+		pointer.y = action.y
+		self.world:add_component(Components.Destroyed, touch_entity)
+	elseif action_id == hash("touch") then
+		local touch_entity = self.world:new_entity()
+		local pointer = self.world:add_component(Components.PointerInput, touch_entity)
+		pointer.x = action.x
+		pointer.y = action.y
+		if action.pressed then
+			self.world:add_component(Components.MouseDownInput, touch_entity)
+		end
+		self.world:add_component(Components.Destroyed, touch_entity)
+	end
+end

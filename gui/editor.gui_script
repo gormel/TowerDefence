@@ -1,0 +1,85 @@
+local Constants     = require("ecs.constants")
+local mesages       = require("editor.mesages")
+local setup         = require("ecs.setup")
+local Components    = require("ecs.components")
+local ui_components = require("gui.ui_components")
+
+local scheme = {
+	BUTTON_CASTLE = "CastleButton",
+	BUTTON_PATH = "PathButton",
+	BUTTON_DEL = "DelWaypointButton",
+	BUTTON_DEL_ROUTE = "DelRouteButton",
+	BUTTON_EXPORT = "ExportButton",
+
+	SELECTION_CASTLE = "CastleSelection",
+	SELECTION_PATH = "PathSelection",
+	SELECTION_DEL = "DelWaypointSelection",
+	SELECTION_DEL_ROUTE = "DelRoutetSelection",
+}
+
+local function sub_highlight_selection(node_name, highlight_node_name)
+	gui.set_visible(gui.get_node(node_name), node_name == highlight_node_name)
+end
+
+local function highlight_selection(node_name)
+	sub_highlight_selection(scheme.SELECTION_CASTLE, node_name)
+	sub_highlight_selection(scheme.SELECTION_PATH, node_name)
+	sub_highlight_selection(scheme.SELECTION_DEL, node_name)
+	sub_highlight_selection(scheme.SELECTION_DEL_ROUTE, node_name)
+end
+
+local function on_castle_mode_click()
+	highlight_selection(scheme.SELECTION_CASTLE)
+	msg.post(Constants.URL_MAIN, mesages.SET_CASTLE_MODE)
+end
+
+local function on_export_click()
+	msg.post(Constants.URL_MAIN, mesages.EXPORT)
+end
+
+local function on_del_mode_click()
+	highlight_selection(scheme.SELECTION_DEL)
+	msg.post(Constants.URL_MAIN, mesages.SET_REMOVE_WAYPOINT_MODE)
+end
+
+local function on_del_route_mode_click()
+	highlight_selection(scheme.SELECTION_DEL_ROUTE)
+	msg.post(Constants.URL_MAIN, mesages.SET_REMOVE_ROUTE_MODE)
+end
+
+local function on_path_mode_click()
+	highlight_selection(scheme.SELECTION_PATH)
+	msg.post(Constants.URL_MAIN, mesages.SET_ROUTE_MODE)
+end
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	msg.post("#", mesages.START)
+end
+
+local function on_start(self)
+	highlight_selection(nil)
+
+	ui_components.add_button(gui.get_node(scheme.BUTTON_CASTLE), on_castle_mode_click)
+	ui_components.add_button(gui.get_node(scheme.BUTTON_PATH), on_path_mode_click)
+	ui_components.add_button(gui.get_node(scheme.BUTTON_DEL), on_del_mode_click)
+	ui_components.add_button(gui.get_node(scheme.BUTTON_DEL_ROUTE), on_del_route_mode_click)
+	ui_components.add_button(gui.get_node(scheme.BUTTON_EXPORT), on_export_click)
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == mesages.START then
+		on_start(self)
+	end
+end
+
+function on_input(self, action_id, action)
+	return ui_components.on_input(action_id, action)
+end
+
+function final(self)
+	ui_components.final()
+end

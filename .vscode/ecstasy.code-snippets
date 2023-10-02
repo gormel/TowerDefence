@@ -11,9 +11,10 @@
         "prefix": "syst",
         "scope": "lua",
         "body": [
-            "local ecstasy = require \"external.ecstasy\"",
-            "local exc, inc, added, removed, changed = ecstasy.exc, ecstasy.inc, ecstasy.added, ecstasy.removed, ecstasy.changed",
+            "local ecstasy    = require \"external.ecstasy\"",
             "local Components = require(\"ecs.components\")",
+            "",
+            "local exc, inc   = ecstasy.exc, ecstasy.inc",
             "",
             "---@class ${1:System} : ecstasy.System",
             "local ${1} = ecstasy.System(\"${1}\")",
@@ -25,7 +26,8 @@
             "function ${1}:execute()",
             "end",
             "",
-            "return ${1}"
+            "return ${1}",
+            ""
         ]
     }
 }
