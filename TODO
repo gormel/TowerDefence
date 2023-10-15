@@ -2,7 +2,7 @@ fea: scene manager
 ref: map reload as scene reload
 fea: map selection
 fea: ui push/pop api
+ref: add bullet effects: fly, hit
 ref: tower rotation using animation
 ref: clear scene on loose correctly
-ref: add bullet effects: fly, hit
 ref: add monster animated view
