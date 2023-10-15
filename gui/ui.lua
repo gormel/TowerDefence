@@ -19,16 +19,18 @@ end
 
 function M.del_component(handle)
 	local component = M.components[handle]
-	M.components[handle] = nil
-	local array = component.array
-	for i = #array, 1, -1 do
-		if array[i] == handle then
-			table.remove(array, i)
+	if component ~= nil then
+		M.components[handle] = nil
+		local array = component.array
+		for i = #array, 1, -1 do
+			if array[i] == handle then
+				table.remove(array, i)
+			end
 		end
-	end
 
-	if component.on_remove then
-		component.on_remove()
+		if component.on_remove then
+			component.on_remove()
+		end
 	end
 end
 
