@@ -1,10 +1,10 @@
-local Constants     = require("ecs.constants")
-local mesages       = require("editor.mesages")
-local setup         = require("ecs.setup")
-local Components    = require("ecs.components")
-local ui_components = require("gui.ui_components")
+local Constants  = require("ecs.constants")
+local mesages    = require("editor.mesages")
+local setup      = require("ecs.setup")
+local Components = require("ecs.components")
+local ui         = require("gui.ui")
 
-local scheme = {
+local scheme     = {
 	BUTTON_CASTLE = "CastleButton",
 	BUTTON_PATH = "PathButton",
 	BUTTON_DEL = "DelWaypointButton",
@@ -15,6 +15,13 @@ local scheme = {
 	SELECTION_PATH = "PathSelection",
 	SELECTION_DEL = "DelWaypointSelection",
 	SELECTION_DEL_ROUTE = "DelRoutetSelection",
+
+	LIST_MAPS = "MapsList",
+	LIST_MAPS_ELEMENT_ROOT = "tmpl_MapButton/Root",
+	BUTTON_MAP = "tmpl_MapButton/Background",
+	TEXT_MAP = "tmpl_MapButton/Text",
+	BUTTON_PREV_MAPS = "PrevButton",
+	BUTTON_NEXT_MAPS = "NextButton",
 }
 
 local function sub_highlight_selection(node_name, highlight_node_name)
@@ -57,14 +64,35 @@ function init(self)
 	msg.post("#", mesages.START)
 end
 
+local function on_map_click(map)
+	msg.post(Constants.URL_MAIN, mesages.LOAD_MAP, { map = map })
+end
+
+local function bind_map(tree_clone, map)
+	gui.set_enabled(tree_clone[scheme.LIST_MAPS_ELEMENT_ROOT], true)
+	gui.set_text(tree_clone[scheme.TEXT_MAP], map)
+	return ui.add_button(tree_clone[scheme.BUTTON_MAP], function() on_map_click(map) end)
+end
+
 local function on_start(self)
 	highlight_selection(nil)
 
-	ui_components.add_button(gui.get_node(scheme.BUTTON_CASTLE), on_castle_mode_click)
-	ui_components.add_button(gui.get_node(scheme.BUTTON_PATH), on_path_mode_click)
-	ui_components.add_button(gui.get_node(scheme.BUTTON_DEL), on_del_mode_click)
-	ui_components.add_button(gui.get_node(scheme.BUTTON_DEL_ROUTE), on_del_route_mode_click)
-	ui_components.add_button(gui.get_node(scheme.BUTTON_EXPORT), on_export_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_CASTLE), on_castle_mode_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_PATH), on_path_mode_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_DEL), on_del_mode_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_DEL_ROUTE), on_del_route_mode_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_EXPORT), on_export_click)
+
+	gui.set_enabled(gui.get_node(scheme.LIST_MAPS_ELEMENT_ROOT), false)
+	local maps = {}
+	for name, _ in pairs(setup.Maps) do
+		table.insert(maps, name)
+	end
+	table.sort(maps)
+	local _, prev, next = ui.add_list(gui.get_node(scheme.LIST_MAPS), gui.get_node(scheme.LIST_MAPS_ELEMENT_ROOT), maps, bind_map)
+
+	ui.add_button(gui.get_node(scheme.BUTTON_PREV_MAPS), function () prev() end)
+	ui.add_button(gui.get_node(scheme.BUTTON_NEXT_MAPS), function () next() end)
 end
 
 function update(self, dt)
@@ -77,9 +105,9 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	return ui_components.on_input(action_id, action)
+	return ui.on_input(action_id, action)
 end
 
 function final(self)
-	ui_components.final()
+	ui.final()
 end
