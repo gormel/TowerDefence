@@ -1,63 +1,64 @@
 local ecstasy                          = require "external.ecstasy"
-local Components                       = require("ecs.components")
-local const                            = require("ecs.constants")
-local DestroySystem                    = require("ecs.systems.DestroySystem")
-local InitViewSystem                   = require("ecs.systems.InitViewSystem")
-local ClearViewSystem                  = require("ecs.systems.ClearViewSystem")
-local RequestTowerSystem               = require("ecs.systems.RequestTowerSystem")
-local CreateTowerSystem                = require("ecs.systems.CreateTowerSystem")
-local SelectTowerTypeSystem            = require("ecs.systems.SelectTowerTypeSystem")
-local PoseViewSystem                   = require("ecs.systems.PoseViewSystem")
-local RoundToCellSystem                = require("ecs.systems.RoundToCellSystem")
-local FollowPointerSystem              = require("ecs.systems.FollowPointerSystem")
-local RenderMoneySystem                = require("ecs.systems.RenderMoneySystem")
-local RenderSelectedTowerTypeSystem    = require("ecs.systems.RenderSelectedTowerTypeSystem")
-local AttachToParentSystem             = require("ecs.systems.AttachToParentSystem")
-local ClearTargetReachedSystem         = require("ecs.systems.ClearTargetReachedSystem")
-local ApplyVelocitySystem              = require("ecs.systems.ApplyVelocitySystem")
-local FollowTargetSystem               = require("ecs.systems.FollowTargetSystem")
-local RotateToTargetSystem             = require("ecs.systems.RotateToTargetSystem")
-local FreeOutOfViewTargetSystem        = require("ecs.systems.FreeOutOfViewTargetSystem")
-local FreeTargetSystem                 = require("ecs.systems.FreeTargetSystem")
-local TargetMonsterInViewRadiusSystem  = require("ecs.systems.TargetMonsterInViewRadiusSystem")
-local setup                            = require("ecs.setup")
-local CooldownSystem                   = require("ecs.systems.CooldownSystem")
-local SpawnMonsterSystem               = require("ecs.systems.SpawnMonsterSystem")
-local CreateMonsterSystem              = require("ecs.systems.CreateMonsterSystem")
-local RotateViewSystem                 = require("ecs.systems.RotateViewSystem")
-local SwitchWaypointSystem             = require("ecs.systems.SwitchWaypointSystem")
-local DealDamageOnTargetReachedSystem  = require("ecs.systems.DealDamageOnTargetReachedSystem")
-local DestroyOnTargetReachedSystem     = require("ecs.systems.DestroyOnTargetReachedSystem")
-local ShootSystem                      = require("ecs.systems.ShootSystem")
-local DestroyChildrenSystem            = require("ecs.systems.DestroyChildrenSystem")
-local DestroyByHealthSystem            = require("ecs.systems.DestroyByHealthSystem")
-local DestroyOnNoTargetSystem          = require("ecs.systems.DestroyOnNoTargetSystem")
-local RewardSystem                     = require("ecs.systems.RewardSystem")
-local DestroyOnCastleReachedSystem     = require("ecs.systems.DestroyOnCastleReachedSystem")
-local GameOverSystem                   = require("ecs.systems.GameOverSystem")
-local mesages                          = require("main.mesages")
-local SetupSpeedSystem                 = require("ecs.systems.SetupSpeedSystem")
-local ApplyStatusSystem                = require("ecs.systems.ApplyStatusSystem")
-local ApplyStatusOnTragetReachedSystem = require("ecs.systems.ApplyStatusOnTragetReachedSystem")
-local FrozenSystem                     = require("ecs.systems.FrozenSystem")
-local PoisonSystem                     = require("ecs.systems.PoisonSystem")
-local BlockedSystem                    = require("ecs.systems.BlockedSystem")
-local LaunchMonsterSpawnerSystem       = require("ecs.systems.LaunchMonsterSpawnerSystem")
-local Constants                        = require("ecs.constants")
-local NextWaveSystem                   = require("ecs.systems.NextWaveSystem")
-local RenderHealthSystem               = require("ecs.systems.RenderHealthSystem")
-local AttachHealthBarSystem            = require("ecs.systems.AttachHealthBarSystem")
-local AttachFrozenStatusSystem         = require("ecs.systems.AttachFrozenStatusSystem")
-local AttachPoisonedStatusSystem       = require("ecs.systems.AttachPoisonedStatusSystem")
-local SelectTowerSystem                = require("ecs.systems.SelectTowerSystem")
-local RenderSelectedTowerSystem        = require("ecs.systems.RenderSelectedTowerSystem")
-local DealDamageSystem                 = require("ecs.systems.DealDamageSystem")
-local AttachSelectionViewSystem        = require("ecs.systems.AttachSelectionViewSystem")
-local AttachUpgradeViewSystem          = require("ecs.systems.AttachUpgradeViewSystem")
-local DetectClickSystem                = require("ecs.systems.DetectClickSystem")
-local BuyTowerSystem                   = require("ecs.systems.BuyTowerSystem")
-local UpgradeTowerSystem               = require("ecs.systems.UpgradeTowerSystem")
-local UpgradeViewClickedSystem         = require("ecs.systems.UpgradeViewClickedSystem")
+local Components                       = require "ecs.components"
+local const                            = require "ecs.constants"
+local DestroySystem                    = require "ecs.systems.DestroySystem"
+local InitViewSystem                   = require "ecs.systems.InitViewSystem"
+local ClearViewSystem                  = require "ecs.systems.ClearViewSystem"
+local RequestTowerSystem               = require "ecs.systems.RequestTowerSystem"
+local CreateTowerSystem                = require "ecs.systems.CreateTowerSystem"
+local SelectTowerTypeSystem            = require "ecs.systems.SelectTowerTypeSystem"
+local PoseViewSystem                   = require "ecs.systems.PoseViewSystem"
+local RoundToCellSystem                = require "ecs.systems.RoundToCellSystem"
+local FollowPointerSystem              = require "ecs.systems.FollowPointerSystem"
+local RenderMoneySystem                = require "ecs.systems.RenderMoneySystem"
+local RenderSelectedTowerTypeSystem    = require "ecs.systems.RenderSelectedTowerTypeSystem"
+local AttachToParentSystem             = require "ecs.systems.AttachToParentSystem"
+local ClearTargetReachedSystem         = require "ecs.systems.ClearTargetReachedSystem"
+local ApplyVelocitySystem              = require "ecs.systems.ApplyVelocitySystem"
+local FollowTargetSystem               = require "ecs.systems.FollowTargetSystem"
+local RotateToTargetSystem             = require "ecs.systems.RotateToTargetSystem"
+local FreeOutOfViewTargetSystem        = require "ecs.systems.FreeOutOfViewTargetSystem"
+local FreeTargetSystem                 = require "ecs.systems.FreeTargetSystem"
+local TargetMonsterInViewRadiusSystem  = require "ecs.systems.TargetMonsterInViewRadiusSystem"
+local setup                            = require "ecs.setup"
+local CooldownSystem                   = require "ecs.systems.CooldownSystem"
+local SpawnMonsterSystem               = require "ecs.systems.SpawnMonsterSystem"
+local CreateMonsterSystem              = require "ecs.systems.CreateMonsterSystem"
+local RotateViewSystem                 = require "ecs.systems.RotateViewSystem"
+local SwitchWaypointSystem             = require "ecs.systems.SwitchWaypointSystem"
+local DealDamageOnTargetReachedSystem  = require "ecs.systems.DealDamageOnTargetReachedSystem"
+local DestroyOnTargetReachedSystem     = require "ecs.systems.DestroyOnTargetReachedSystem"
+local ShootSystem                      = require "ecs.systems.ShootSystem"
+local DestroyChildrenSystem            = require "ecs.systems.DestroyChildrenSystem"
+local DestroyByHealthSystem            = require "ecs.systems.DestroyByHealthSystem"
+local DestroyOnNoTargetSystem          = require "ecs.systems.DestroyOnNoTargetSystem"
+local RewardSystem                     = require "ecs.systems.RewardSystem"
+local DestroyOnCastleReachedSystem     = require "ecs.systems.DestroyOnCastleReachedSystem"
+local GameOverSystem                   = require "ecs.systems.GameOverSystem"
+local mesages                          = require "main.mesages"
+local SetupSpeedSystem                 = require "ecs.systems.SetupSpeedSystem"
+local ApplyStatusSystem                = require "ecs.systems.ApplyStatusSystem"
+local ApplyStatusOnTragetReachedSystem = require "ecs.systems.ApplyStatusOnTragetReachedSystem"
+local FrozenSystem                     = require "ecs.systems.FrozenSystem"
+local PoisonSystem                     = require "ecs.systems.PoisonSystem"
+local BlockedSystem                    = require "ecs.systems.BlockedSystem"
+local LaunchMonsterSpawnerSystem       = require "ecs.systems.LaunchMonsterSpawnerSystem"
+local Constants                        = require "ecs.constants"
+local NextWaveSystem                   = require "ecs.systems.NextWaveSystem"
+local RenderHealthSystem               = require "ecs.systems.RenderHealthSystem"
+local AttachHealthBarSystem            = require "ecs.systems.AttachHealthBarSystem"
+local AttachFrozenStatusSystem         = require "ecs.systems.AttachFrozenStatusSystem"
+local AttachPoisonedStatusSystem       = require "ecs.systems.AttachPoisonedStatusSystem"
+local SelectTowerSystem                = require "ecs.systems.SelectTowerSystem"
+local RenderSelectedTowerSystem        = require "ecs.systems.RenderSelectedTowerSystem"
+local DealDamageSystem                 = require "ecs.systems.DealDamageSystem"
+local AttachSelectionViewSystem        = require "ecs.systems.AttachSelectionViewSystem"
+local AttachUpgradeViewSystem          = require "ecs.systems.AttachUpgradeViewSystem"
+local DetectClickSystem                = require "ecs.systems.DetectClickSystem"
+local BuyTowerSystem                   = require "ecs.systems.BuyTowerSystem"
+local UpgradeTowerSystem               = require "ecs.systems.UpgradeTowerSystem"
+local UpgradeViewClickedSystem         = require "ecs.systems.UpgradeViewClickedSystem"
+local locator                          = require "engine.locator"
 
 local DefWorld                         = ecstasy.World()
 
@@ -66,7 +67,7 @@ local function init_castle(self, entity)
 	local castle_health = self.world:add_component(Components.Health, entity)
 	castle_health.value = setup.CastleSetup.health
 	castle_health.max_value = setup.CastleSetup.health
-	
+
 	local view_entity = self.world:new_entity()
 	local vew_resource = self.world:add_component(Components.Resource, view_entity)
 	vew_resource.factory_url = "/world_objects#castle_factory"
@@ -136,7 +137,7 @@ local function init_map(self, map_id)
 		table.insert(waypoints, castle)
 
 		link_waypoints(self, waypoints)
-	
+
 		init_spawner(self, waypoints[1])
 	end
 end
@@ -160,7 +161,7 @@ local function init_game(self)
 	self.world:add_component(Components.FollowPointer, cursor_entity)
 	self.world:add_component(Components.RoundToCell, cursor_entity)
 
-	init_map(self, "Map_01")
+	init_map(self, locator.current_map or "Map_01")
 end
 
 function init(self)

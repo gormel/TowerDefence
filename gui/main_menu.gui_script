@@ -1,0 +1,62 @@
+local Constants  = require "ecs.constants"
+local mesages    = require "engine.messages"
+local setup      = require "ecs.setup"
+local Components = require "ecs.components"
+local ui         = require "gui.ui"
+local locator    = require "engine.locator"
+
+local scheme     = {
+	LIST_MAPS = "MapsList",
+	LIST_MAPS_ELEMENT_ROOT = "tmpl_MapButton/Root",
+	BUTTON_MAP = "tmpl_MapButton/Background",
+	TEXT_MAP = "tmpl_MapButton/Text",
+	BUTTON_PREV_MAPS = "PrevButton",
+	BUTTON_NEXT_MAPS = "NextButton",
+}
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	msg.post("#", mesages.START)
+end
+
+local function on_map_click(map)
+	locator.current_map = map
+	msg.post(Constants.URL_ROUTER, mesages.LOAD_SCENE, { name = "main" })
+end
+
+local function bind_map(tree_clone, map)
+	gui.set_enabled(tree_clone[scheme.LIST_MAPS_ELEMENT_ROOT], true)
+	gui.set_text(tree_clone[scheme.TEXT_MAP], map)
+	return ui.add_button(tree_clone[scheme.BUTTON_MAP], function() on_map_click(map) end)
+end
+
+local function on_start(self)
+	gui.set_enabled(gui.get_node(scheme.LIST_MAPS_ELEMENT_ROOT), false)
+	local maps = {}
+	for name, _ in pairs(setup.Maps) do
+		table.insert(maps, name)
+	end
+	table.sort(maps)
+	local _, prev, next = ui.add_list(gui.get_node(scheme.LIST_MAPS), gui.get_node(scheme.LIST_MAPS_ELEMENT_ROOT), maps,
+		bind_map)
+
+	ui.add_button(gui.get_node(scheme.BUTTON_PREV_MAPS), function() prev() end)
+	ui.add_button(gui.get_node(scheme.BUTTON_NEXT_MAPS), function() next() end)
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == mesages.START then
+		on_start(self)
+	end
+end
+
+function on_input(self, action_id, action)
+	return ui.on_input(action_id, action)
+end
+
+function final(self)
+	ui.final()
+end

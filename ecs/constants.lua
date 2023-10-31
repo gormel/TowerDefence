@@ -18,6 +18,7 @@ return {
 
 	URL_MAIN              = "/go#main",
 	URL_GUI               = "/gui#gui",
+	URL_ROUTER 			  = msg.url("main_router", "/logic", "scene_router"),
 
 	FACTORY_URL_HP_BAR    = "/ui#hp_bar_factory",
 	FACTORY_URL_SELECTION = "/ui#selection_factory",

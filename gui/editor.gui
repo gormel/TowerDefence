@@ -748,7 +748,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/map_button.gui"
+  template: "/gui/editor_map_button.gui"
   template_node_child: false
   custom_type: 0
   enabled: true

@@ -57,6 +57,6 @@ function on_message(self, message_id, message, sender)
 			self.state = "idle"
 		end
 	elseif message_id == messages.LOAD_SCENE then
-		load_scene(self, message)
+		load_scene(self, message.name)
 	end
 end

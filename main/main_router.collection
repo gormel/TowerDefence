@@ -79,7 +79,7 @@ embedded_instances {
   "  }\n"
   "  properties {\n"
   "    id: \"initial_scene\"\n"
-  "    value: \"main\"\n"
+  "    value: \"main_menu\"\n"
   "    type: PROPERTY_TYPE_HASH\n"
   "  }\n"
   "  property_decls {\n"
