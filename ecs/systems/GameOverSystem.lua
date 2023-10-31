@@ -18,7 +18,7 @@ function GameOverSystem:execute()
         for i = 1, self.world.current_entity_id do
             self.destroyeds:get_or_add(i)
         end
-        msg.post("/go#main", mesages.GAME_OVER)
+        msg.post(constants.URL_MAIN, mesages.GAME_OVER)
         break
     end
 end

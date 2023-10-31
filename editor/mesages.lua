@@ -1,4 +1,4 @@
----@class Messages
+---@class editor.Messages
 return {
     START                    = hash("start"),
     SET_CASTLE_MODE          = hash("editor_select_castle_mode"),
