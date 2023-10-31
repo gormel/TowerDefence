@@ -59,6 +59,8 @@ local BuyTowerSystem                   = require "ecs.systems.BuyTowerSystem"
 local UpgradeTowerSystem               = require "ecs.systems.UpgradeTowerSystem"
 local UpgradeViewClickedSystem         = require "ecs.systems.UpgradeViewClickedSystem"
 local locator                          = require "engine.locator"
+local engine_msg                       = require "engine.messages"
+local scenes                           = require "main.scenes"
 
 local DefWorld                         = ecstasy.World()
 
@@ -276,7 +278,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == mesages.NEXT_WAVE then
 		next_wave(self)
 	elseif message_id == mesages.RESTART then
-		init_game(self)
+		msg.post(Constants.URL_ROUTER, engine_msg.LOAD_SCENE, { name = scenes.MAIN_MENU })
 	end
 end
 

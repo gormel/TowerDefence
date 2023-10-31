@@ -4,6 +4,7 @@ local setup      = require "ecs.setup"
 local Components = require "ecs.components"
 local ui         = require "gui.ui"
 local locator    = require "engine.locator"
+local scenes     = require "main.scenes"
 
 local scheme     = {
 	LIST_MAPS = "MapsList",
@@ -21,7 +22,7 @@ end
 
 local function on_map_click(map)
 	locator.current_map = map
-	msg.post(Constants.URL_ROUTER, mesages.LOAD_SCENE, { name = "main" })
+	msg.post(Constants.URL_ROUTER, mesages.LOAD_SCENE, { name = scenes.MAIN })
 end
 
 local function bind_map(tree_clone, map)
