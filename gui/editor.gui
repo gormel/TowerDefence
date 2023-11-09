@@ -655,7 +655,7 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: -150.0
+    y: 150.0
     z: 0.0
     w: 1.0
   }
@@ -689,7 +689,7 @@ nodes {
   id: "MapsList"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_S
+  pivot: PIVOT_N
   adjust_mode: ADJUST_MODE_FIT
   parent: "Maps"
   layer: ""
@@ -790,7 +790,7 @@ nodes {
   id: "tmpl_MapButton/Root"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_S
+  pivot: PIVOT_N
   adjust_mode: ADJUST_MODE_FIT
   parent: "tmpl_MapButton"
   layer: ""
@@ -815,7 +815,7 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 22.0
+    y: -22.0
     z: 0.0
     w: 1.0
   }

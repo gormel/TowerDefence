@@ -1,6 +1,6 @@
 local M = {}
 
-M.components = {}
+M.contexts = {}
 M.buttons = {}
 M.lists = {}
 M.idx = 0
@@ -8,9 +8,18 @@ M.idx = 0
 local function register(component)
 	M.idx = M.idx + 1
 	local idx = M.idx
-	M.components[idx] = component
+	local context = M.contexts[#M.contexts]
+	context.components[idx] = component
 	table.insert(component.array, idx)
 	return idx
+end
+
+function M.push()
+	local context = {
+		components = {}
+	}
+	table.insert(M.contexts, context)
+	return context
 end
 
 function M.add_button(node, callback)
@@ -18,9 +27,10 @@ function M.add_button(node, callback)
 end
 
 function M.del_component(handle)
-	local component = M.components[handle]
+	local context = M.contexts[#M.contexts]
+	local component = context.components[handle]
 	if component ~= nil then
-		M.components[handle] = nil
+		context.components[handle] = nil
 		local array = component.array
 		for i = #array, 1, -1 do
 			if array[i] == handle then
@@ -61,7 +71,7 @@ local function fill_list(node, item_template_node, data, bind_fn, idx, nodes, co
 				table.insert(nodes, clone_root)
 
 				gui.set_parent(clone_root, node, false)
-				gui.set_position(clone_root, vmath.vector3(element_size.x * (c - 1), element_size.y * (r - 1), 0))
+				gui.set_position(clone_root, vmath.vector3(element_size.x * (c - 1), element_size.y * (1 - r), 0))
 
 				t_idx = t_idx + 1
 			end
@@ -89,10 +99,12 @@ function M.add_list(node, item_template_node, data, bind_fn)
 	local component = { array = M.lists, on_remove = clear }
 	local function flip(shift)
 		local t_idx = start_idx
-		local n_idx = math.min(math.max(t_idx + shift, 1), #data)
-		if n_idx ~= t_idx then
-			start_idx = n_idx
-			page = fill_list(node, item_template_node, data, bind_fn, start_idx, nodes, components)
+		if t_idx + shift >= 1 and t_idx + shift <= #data then
+			local n_idx = math.min(math.max(t_idx + shift, 1), #data)
+			if n_idx ~= t_idx then
+				start_idx = n_idx
+				page = fill_list(node, item_template_node, data, bind_fn, start_idx, nodes, components)
+			end
 		end
 	end
 
@@ -110,8 +122,14 @@ end
 function M.on_input(action_id, action)
 	if action_id == hash("touch") and action.pressed then
 		for i = 1, #M.buttons do
-			local button = M.components[M.buttons[i]]
-			if gui.is_enabled(button.node, true) and button.callback and gui.pick_node(button.node, action.x, action.y) then
+			local context = M.contexts[#M.contexts]
+			local button = context.components[M.buttons[i]]
+			if
+				button ~= nil
+				and gui.is_enabled(button.node, true)
+				and button.callback
+				and gui.pick_node(button.node, action.x, action.y)
+			then
 				button.callback()
 				return true
 			end
@@ -120,8 +138,9 @@ function M.on_input(action_id, action)
 	return false
 end
 
-function M.final()
-	for k, _ in pairs(M.components) do
+function M.final(context)
+	local context = context or M.contexts[#M.contexts]
+	for k, _ in pairs(context.components) do
 		M.del_component(k)
 	end
 end

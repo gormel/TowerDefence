@@ -278,6 +278,8 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == mesages.NEXT_WAVE then
 		next_wave(self)
 	elseif message_id == mesages.RESTART then
+		msg.post(Constants.URL_ROUTER, engine_msg.LOAD_SCENE, { name = scenes.MAIN })
+	elseif message_id == mesages.GO_MAIN_MENU then
 		msg.post(Constants.URL_ROUTER, engine_msg.LOAD_SCENE, { name = scenes.MAIN_MENU })
 	end
 end

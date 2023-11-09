@@ -60,6 +60,8 @@ local function on_path_mode_click()
 end
 
 function init(self)
+	ui.push()
+	
 	msg.post(".", "acquire_input_focus")
 	msg.post("#", mesages.START)
 end

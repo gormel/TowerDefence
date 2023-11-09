@@ -13,7 +13,9 @@ local scheme     = {
 	TEXT_MONEY = "money_text",
 	IMAGE_GAME_OVER = "restart",
 	BUTTON_RESTART = "btn_restart",
+	BUTTON_RESTART_MENU = "btn_menu",
 	BUTTON_NEXT_WAVE = "btn_next_wave",
+	BUTTON_MAIN_MENU = "btn_main_menu",
 	TEXT_WAVE_INDEX = "wave_index_value_text",
 
 	NODE_SELECTED_TOWER_INFO = "tower_info",
@@ -23,8 +25,13 @@ local scheme     = {
 }
 
 function init(self)
+	ui.push()
 	msg.post(".", "acquire_input_focus")
 	msg.post("#", mesages.START)
+end
+
+local function on_main_menu_click()
+	msg.post(Constants.URL_MAIN, mesages.GO_MAIN_MENU)
 end
 
 local function on_next_wave_click()
@@ -65,7 +72,10 @@ end
 
 local function on_start(self)
 	ui.add_button(gui.get_node(scheme.BUTTON_RESTART), on_restart_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_RESTART_MENU), on_main_menu_click)
 	ui.add_button(gui.get_node(scheme.BUTTON_NEXT_WAVE), on_next_wave_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_MAIN_MENU), on_main_menu_click)
+
 	for tower_setup_type, tower_setup in pairs(setup.Towers) do
 		if tower_setup.button_template ~= nil then
 			local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.BUTTON)

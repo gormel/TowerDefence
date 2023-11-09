@@ -16,6 +16,8 @@ local scheme     = {
 }
 
 function init(self)
+	ui.push()
+
 	msg.post(".", "acquire_input_focus")
 	msg.post("#", mesages.START)
 end
@@ -38,8 +40,10 @@ local function on_start(self)
 		table.insert(maps, name)
 	end
 	table.sort(maps)
-	local _, prev, next = ui.add_list(gui.get_node(scheme.LIST_MAPS), gui.get_node(scheme.LIST_MAPS_ELEMENT_ROOT), maps,
-		bind_map)
+	local _, prev, next = ui.add_list(
+		gui.get_node(scheme.LIST_MAPS),
+		gui.get_node(scheme.LIST_MAPS_ELEMENT_ROOT),
+		maps, bind_map)
 
 	ui.add_button(gui.get_node(scheme.BUTTON_PREV_MAPS), function() prev() end)
 	ui.add_button(gui.get_node(scheme.BUTTON_NEXT_MAPS), function() next() end)

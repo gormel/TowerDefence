@@ -1,5 +1,3 @@
-fea: ui push/pop api
 ref: add bullet effects: fly, hit
 ref: tower rotation using animation
-ref: clear scene on loose correctly
 ref: add monster animated view
