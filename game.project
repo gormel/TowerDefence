@@ -3,7 +3,7 @@ title = TowerDefence
 dependencies = 
 
 [bootstrap]
-main_collection = /editor/editor.collectionc
+main_collection = /main/main_router.collectionc
 
 [input]
 game_binding = /input/game.input_bindingc

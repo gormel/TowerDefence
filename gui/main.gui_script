@@ -1,10 +1,10 @@
-local Constants = require("ecs.constants")
-local mesages   = require("main.mesages")
-local setup     = require("ecs.setup")
-local Components= require("ecs.components")
-local ui_components = require("gui.ui_components")
+local Constants  = require("ecs.constants")
+local mesages    = require("main.mesages")
+local setup      = require("ecs.setup")
+local Components = require("ecs.components")
+local ui         = require("gui.ui")
 
-local scheme = {
+local scheme     = {
 	TOWER_FRAGMENTS = {
 		SELECTED = "/selection",
 		BUTTON = "/root_node",
@@ -41,7 +41,7 @@ local function on_select_click(self, tower_type)
 end
 
 local function get_tower_node(tower_setup, fragment)
-	return gui.get_node(tower_setup.button_template..fragment)
+	return gui.get_node(tower_setup.button_template .. fragment)
 end
 
 local function update_selected_tower(self, emplty, tower_type, dps, statuses, kills)
@@ -51,7 +51,7 @@ local function update_selected_tower(self, emplty, tower_type, dps, statuses, ki
 	end
 
 	local tower_cfg = setup.Towers[tower_type]
-	
+
 	gui.set_enabled(gui.get_node(scheme.NODE_SELECTED_TOWER_INFO), true)
 
 	gui.set_text(gui.get_node(scheme.TEXT_TOWER_NAME), tower_type)
@@ -64,13 +64,13 @@ kills: %d]], dps, table.concat(statuses, ", "), kills)
 end
 
 local function on_start(self)
-	ui_components.add_button(gui.get_node(scheme.BUTTON_RESTART), on_restart_click)
-	ui_components.add_button(gui.get_node(scheme.BUTTON_NEXT_WAVE), on_next_wave_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_RESTART), on_restart_click)
+	ui.add_button(gui.get_node(scheme.BUTTON_NEXT_WAVE), on_next_wave_click)
 	for tower_setup_type, tower_setup in pairs(setup.Towers) do
 		if tower_setup.button_template ~= nil then
 			local node = get_tower_node(tower_setup, scheme.TOWER_FRAGMENTS.BUTTON)
 			local tower_type = tower_setup_type
-			ui_components.add_button(node, function() on_select_click(self, tower_type) end)
+			ui.add_button(node, function() on_select_click(self, tower_type) end)
 		end
 	end
 end
@@ -100,9 +100,9 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	return ui_components.on_input(action_id, action)
+	return ui.on_input(action_id, action)
 end
 
 function final(self)
-	ui_components.final()
+	ui.final()
 end

@@ -1,0 +1,62 @@
+local messages = require "engine.messages"
+
+go.property("url_prefix", hash("/go"))
+go.property("initial_scene", hash("scene_name"))
+
+local function begin_unload(self)
+	self.state = "unloading"
+	msg.post(msg.url(nil, self.url_prefix, self.scene), "unload")
+	
+end
+
+local function begin_load(self)
+	self.state = "loading"
+	msg.post(msg.url(nil, self.url_prefix, self.queue[1]), "async_load")
+	
+end
+
+-- idle -> [unloading ->] loading -> idle
+
+local function load_scene(self, name)
+	table.insert(self.queue, name)
+	if self.state == "idle" then
+		if self.scene ~= nil then
+			begin_unload(self)
+		else
+			begin_load(self)
+		end
+	end
+end
+
+function init(self)
+	self.queue = {}
+	self.state = "idle"
+
+	msg.post(".", messages.START)
+end
+
+local function on_start(self)
+	msg.post(self.url_prefix, "acquire_input_focus")
+	load_scene(self, self.initial_scene)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == messages.START then
+		on_start(self)
+	elseif message_id == hash("proxy_unloaded") then
+		self.scene = nil
+		begin_load(self)
+	elseif message_id == hash("proxy_loaded") then
+		msg.post(msg.url(sender), "init")
+		msg.post(msg.url(sender), "enable")
+		self.scene = self.queue[1]
+		table.remove(self.queue, 1)
+		if #self.queue > 0 then
+			begin_unload(self)
+		else
+			self.state = "idle"
+		end
+	elseif message_id == messages.LOAD_SCENE then
+		load_scene(self, message.name)
+	end
+end

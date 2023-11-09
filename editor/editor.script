@@ -23,6 +23,8 @@ local ConnectionSystem           = require "ecs.editor_systems.ConnectionSystem"
 local RenderConnectionSystem     = require "ecs.editor_systems.RenderConnectionSystem"
 local DelWaypointSystem          = require "ecs.editor_systems.DelWaypointSystem"
 local DelRouteSystem             = require "ecs.editor_systems.DelRouteSystem"
+local setup                      = require "ecs.setup"
+local constants                  = require "ecs.constants"
 
 
 local function init_editor(self)
@@ -33,6 +35,69 @@ local function init_editor(self)
 	self.world:add_component(Components.Position, cursor_entity)
 	self.world:add_component(Components.FollowPointer, cursor_entity)
 	self.world:add_component(Components.RoundToCell, cursor_entity)
+end
+local function init_castle(self, entity)
+	self.world:add_component(Components.Castle, entity)
+	
+	local view_entity = self.world:new_entity()
+	local vew_resource = self.world:add_component(Components.Resource, view_entity)
+	vew_resource.factory_url = constants.FACTORY_URL_EDITOR_CASTLE
+	local view_parent = self.world:add_component(Components.Parent, view_entity)
+	view_parent.entity = entity
+	self.world:add_component(Components.AttachToParent, view_entity)
+end
+
+local function init_waypoint(self, position)
+	local waypoint_entity = self.world:new_entity()
+	local pos = self.world:add_component(Components.Position, waypoint_entity)
+	pos.x = position.x
+	pos.y = position.y
+	self.world:add_component(Components.Waypoint, waypoint_entity)
+
+	local view_entity = self.world:new_entity()
+	local vew_resource = self.world:add_component(Components.Resource, view_entity)
+	vew_resource.factory_url = constants.FACTORY_URL_EDITOR_WAYPOINT
+	local view_parent = self.world:add_component(Components.Parent, view_entity)
+	view_parent.entity = waypoint_entity
+	self.world:add_component(Components.AttachToParent, view_entity)
+
+	return waypoint_entity
+end
+
+local function link_waypoints(self, entities)
+	local prev = nil
+	for _, entity in ipairs(entities) do
+		if prev ~= nil then
+			local prev_waypoint = self.world:get_component(Components.Waypoint, prev)
+			prev_waypoint.next = entity
+
+			local connection_entity = self.world:new_entity()
+			local connection = self.world:add_component(EComponents.Connection, connection_entity)
+			connection.a_entity = prev
+			connection.b_entity = entity
+			self.world:add_component(EComponents.AttachConnectionView, connection_entity)
+		end
+
+		prev = entity
+	end
+end
+
+local function init_map(self, map_id)
+	local map = setup.Maps[map_id]
+	local castle = init_waypoint(self, map.Castle)
+	init_castle(self, castle)
+	for _, route in pairs(map.Routes) do
+		local waypoints = {}
+		for idx, position in ipairs(route) do
+			local wp_entity = init_waypoint(self, position)
+			table.insert(waypoints, wp_entity)
+			if idx == 1 then
+				self.world:add_component(EComponents.RootWaypoint, wp_entity)
+			end
+		end
+
+		link_waypoints(self, waypoints)
+	end
 end
 
 function init(self)
@@ -89,6 +154,12 @@ function on_message(self, message_id, message, sender)
 		local entity = self.world:new_entity()
 		self.world:add_component(EComponents.NewEditorMode, entity)
 		self.world:add_component(EComponents.RouteEditorMode, entity)
+	elseif message_id == mesages.LOAD_MAP then
+        for i = 1, self.world.current_entity_id do
+			self.world:add_component(Components.Destroyed, i)
+        end
+		init_editor(self)
+		init_map(self, message.map)
 	elseif message_id == mesages.EXPORT then
 		local entity = self.world:new_entity()
 		self.world:add_component(EComponents.ExportMap, entity)

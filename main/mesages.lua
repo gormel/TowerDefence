@@ -1,4 +1,4 @@
----@class Messages
+---@class game.Messages
 return {
     START                      = hash("start"),
     UPDATE_MONEY               = hash("update_money"),
